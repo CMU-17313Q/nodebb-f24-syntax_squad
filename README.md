@@ -10,6 +10,7 @@ NodeBB by itself contains a "common core" of basic functionality, while addition
 
 ### [Try it now](//try.nodebb.org) | [Documentation](//docs.nodebb.org)
 
+<<<<<<< HEAD
 ### Team Members
 + Abdallah Almana aalmana@andrew.cmu.edu
 + Abdulwahab Al-Rumaihi arumaihi@andrew.cmu.edu
@@ -17,6 +18,8 @@ NodeBB by itself contains a "common core" of basic functionality, while addition
 + Najoud Al-Talib ntalib@andrew.cmu.edu
 + Reem Kensouh rkensouh@andrew.cmu.edu
 
+=======
+>>>>>>> reem-feature
 ## Screenshots
 
 NodeBB's theming engine is highly flexible and does not restrict your design choices. Check out some themed installs in these screenshots below:

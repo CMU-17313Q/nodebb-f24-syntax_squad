@@ -15,14 +15,23 @@ const Configs = module.exports;
 
 Meta.config = {};
 
+<<<<<<< HEAD
 // called after data is loaded from db
 function deserialize(config) {
 	const deserialized = {};
+=======
+
+// called after data is loaded from db
+function deserialize(config) {
+	const deserialized = {};
+
+>>>>>>> reem-feature
 	Object.keys(config).forEach((key) => {
 		const defaultType = typeof defaults[key];
 		const type = typeof config[key];
 		const number = parseFloat(config[key]);
 
+<<<<<<< HEAD
 		if (defaultType === 'string' && type === 'number') {
 			deserialized[key] = String(config[key]);
 		} else if (defaultType === 'number' && type === 'string') {
@@ -53,6 +62,66 @@ function deserialize(config) {
 	return deserialized;
 }
 
+=======
+		deserialized[key] = handleTypeConversion(defaultType, type, config[key], number, key);
+	});
+
+	return deserialized;
+}
+
+// got this code from ChatGPT
+function handleTypeConversion(defaultType, type, value, number, key) {
+	if (defaultType === 'string' && type === 'number') {
+		return String(value);
+	}
+
+	if (defaultType === 'number' && type === 'string') {
+		return handleNumberConversion(number, value, key);
+	}
+
+	if (value === 'true') {
+		return true;
+	}
+
+	if (value === 'false') {
+		return false;
+	}
+
+	if (value === null) {
+		return defaults[key];
+	}
+
+	if (defaultType === 'undefined' && !isNaN(number) && isFinite(value)) {
+		return number;
+	}
+
+	if (Array.isArray(defaults[key]) && !Array.isArray(value)) {
+		return handleArrayConversion(value, key);
+	}
+
+	return value;
+}
+
+function handleNumberConversion(number, value, key) {
+	if (!isNaN(number) && isFinite(value)) {
+		return number;
+	}
+	return defaults[key];
+}
+
+function handleArrayConversion(value, key) {
+	try {
+		return JSON.parse(value || '[]');
+	} catch (err) {
+		winston.error(err.stack);
+		return defaults[key];
+	}
+}
+
+console.log('Reem');
+
+
+>>>>>>> reem-feature
 // called before data is saved to db
 function serialize(config) {
 	const serialized = {};

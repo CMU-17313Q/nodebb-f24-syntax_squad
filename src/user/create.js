@@ -122,6 +122,11 @@ module.exports = function (User) {
 		return userData.uid;
 	}
 
+<<<<<<< HEAD
+=======
+	console.log('Reem');
+
+>>>>>>> reem-feature
 	async function storePassword(uid, password) {
 		if (!password) {
 			return;
