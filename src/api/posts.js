@@ -99,7 +99,7 @@ async function validatePost(data, meta, contentLen, caller) {
 }
 
 postsAPI.edit = async function (caller, data) {
-	console.log("here dude");
+	
 	if (!data || !data.pid || (meta.config.minimumPostLength !== 0 && !data.content)) {
 		throw new Error('[[error:invalid-data]]');
 	}
