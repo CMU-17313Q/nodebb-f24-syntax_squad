@@ -10,12 +10,14 @@ NodeBB by itself contains a "common core" of basic functionality, while addition
 
 ### [Try it now](//try.nodebb.org) | [Documentation](//docs.nodebb.org)
 
+
 ### Team Members
 + Abdallah Almana aalmana@andrew.cmu.edu
 + Abdulwahab Al-Rumaihi arumaihi@andrew.cmu.edu
 + Hiba Hamad hhamad@andrew.cmu.edu
 + Najoud Al-Talib ntalib@andrew.cmu.edu
 + Reem Kensouh rkensouh@andrew.cmu.edu
+
 
 ## Screenshots
 
