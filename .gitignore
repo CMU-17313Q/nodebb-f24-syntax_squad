@@ -73,5 +73,3 @@ test.sh
 
 .docker/**
 !**/.gitkeep
-node_modules
-node_modules
