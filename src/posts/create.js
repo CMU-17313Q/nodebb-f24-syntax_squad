@@ -10,16 +10,18 @@ const topics = require('../topics');
 const categories = require('../categories');
 const groups = require('../groups');
 const privileges = require('../privileges');
+const { post } = require('../request');
 
 module.exports = function (Posts) {
     Posts.create = async function (data) {
-        console.log(data);
+        console.log(postObj);
         // This is an internal method, consider using Topics.reply instead
         const { uid } = data;
         const { tid } = data;
         const content = data.content.toString();
         const timestamp = data.timestamp || Date.now();
         const isMain = data.isMain || false;
+		var anonymous = data.isAnonymous || false;
 
         if (!uid && parseInt(uid, 10) !== 0) {
             throw new Error('[[error:invalid-uid]]');
@@ -36,6 +38,7 @@ module.exports = function (Posts) {
             tid: tid,
             content: content,
             timestamp: timestamp,
+			anonymous: data.isAnonymous || false,
         };
 
         // Add the isAnonymous field if present in the data
