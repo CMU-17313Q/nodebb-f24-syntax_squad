@@ -27,8 +27,6 @@ module.exports = function (Posts) {
 		if (data.toPid) {
 			await checkToPid(data.toPid, uid);
 		}
-		console.log('PRINTING THE DATA BEFORE LET POSTDATA');
-		console.log(data);
 
 		const pid = await db.incrObjectField('global', 'nextPid');
 		let postData = {
@@ -37,7 +35,6 @@ module.exports = function (Posts) {
 			tid: tid,
 			content: content,
 			timestamp: timestamp,
-			isAnonymous: data.isAnonymous || false, // Convert string to boolean
 		};
 
 		if (data.toPid) {
@@ -57,8 +54,6 @@ module.exports = function (Posts) {
 		const topicData = await topics.getTopicFields(tid, ['cid', 'pinned']);
 		postData.cid = topicData.cid;
 
-		console.log('PRINTING THE DATA AFTERRRRR LET POSTDATA');
-		console.log(postData);
 		await Promise.all([
 			db.sortedSetAdd('posts:pid', timestamp, postData.pid),
 			db.incrObjectField('global', 'postCount'),

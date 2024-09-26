@@ -1,7 +1,12 @@
 dist/
 yarn.lock
 npm-debug.log
-#node_modules/
+# Ignore everything in node_modules
+node_modules/*
+
+# Except the specific file
+!node_modules/nodebb-plugin-composer-default/static/templates/partials/composer-title-container.tpl
+
 sftp-config.json
 config.json
 jsconfig.json
