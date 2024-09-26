@@ -4,7 +4,13 @@ npm-debug.log
 # Ignore everything in node_modules
 node_modules/*
 
-# Except the specific file
+# Unignore the necessary subdirectories
+!node_modules/nodebb-plugin-composer-default/
+!node_modules/nodebb-plugin-composer-default/static/
+!node_modules/nodebb-plugin-composer-default/static/templates/
+!node_modules/nodebb-plugin-composer-default/static/templates/partials/
+
+# Unignore the specific file
 !node_modules/nodebb-plugin-composer-default/static/templates/partials/composer-title-container.tpl
 
 sftp-config.json
