@@ -4,8 +4,6 @@ npm-debug.log
 # Ignore everything in node_modules
 node_modules/*
 
-!node_modules/nodebb-plugin-composer-default/static/templates/partials/
-
 # Unignore the specific file
 !node_modules/nodebb-plugin-composer-default/static/templates/partials/composer-title-container.tpl
 
