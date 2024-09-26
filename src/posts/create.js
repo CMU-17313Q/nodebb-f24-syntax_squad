@@ -10,27 +10,27 @@ const topics = require('../topics');
 const categories = require('../categories');
 const groups = require('../groups');
 const privileges = require('../privileges');
-const { post } = require('../request');
 
 module.exports = function (Posts) {
     Posts.create = async function (data) {
-        console.log(postObj);
         // This is an internal method, consider using Topics.reply instead
         const { uid } = data;
         const { tid } = data;
         const content = data.content.toString();
         const timestamp = data.timestamp || Date.now();
         const isMain = data.isMain || false;
-		var anonymous = data.isAnonymous || false;
-
+        const isAnonymous = data.isAnonymous === true || data.isAnonymous === 'true';
+    
         if (!uid && parseInt(uid, 10) !== 0) {
             throw new Error('[[error:invalid-uid]]');
         }
-
+    
         if (data.toPid) {
             await checkToPid(data.toPid, uid);
         }
-
+        console.log("PRINTING THE DATA BEFORE LET POSTDATA");
+        console.log(data);
+    
         const pid = await db.incrObjectField('global', 'nextPid');
         let postData = {
             pid: pid,
@@ -38,14 +38,10 @@ module.exports = function (Posts) {
             tid: tid,
             content: content,
             timestamp: timestamp,
-			anonymous: data.isAnonymous || false,
+            isAnonymous: data.isAnonymous || false,  // Convert string to boolean
         };
-
-        // Add the isAnonymous field if present in the data
-        if (typeof data.isAnonymous !== 'undefined') {
-            postData.isAnonymous = data.isAnonymous;
-        }
-
+        
+    
         if (data.toPid) {
             postData.toPid = data.toPid;
         }
@@ -55,14 +51,16 @@ module.exports = function (Posts) {
         if (data.handle && !parseInt(uid, 10)) {
             postData.handle = data.handle;
         }
-
+    
         let result = await plugins.hooks.fire('filter:post.create', { post: postData, data: data });
         postData = result.post;
         await db.setObject(`post:${postData.pid}`, postData);
-
+    
         const topicData = await topics.getTopicFields(tid, ['cid', 'pinned']);
         postData.cid = topicData.cid;
-
+    
+        console.log("PRINTING THE DATA AFTERRRRR LET POSTDATA");
+        console.log(postData);
         await Promise.all([
             db.sortedSetAdd('posts:pid', timestamp, postData.pid),
             db.incrObjectField('global', 'postCount'),
@@ -73,17 +71,13 @@ module.exports = function (Posts) {
             addReplyTo(postData, timestamp),
             Posts.uploads.sync(postData.pid),
         ]);
-
+    
         result = await plugins.hooks.fire('filter:post.get', { post: postData, uid: data.uid });
         result.post.isMain = isMain;
-        
-        // Ensure the isAnonymous field is retained in the result
-        result.post.isAnonymous = postData.isAnonymous;
-
         plugins.hooks.fire('action:post.save', { post: _.clone(result.post) });
         return result.post;
     };
-
+    
     async function addReplyTo(postData, timestamp) {
         if (!postData.toPid) {
             return;
@@ -105,4 +99,3 @@ module.exports = function (Posts) {
         }
     }
 };
-
