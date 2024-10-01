@@ -113,10 +113,10 @@ define('forum/topic/threadTools', [
 		//Code for best response, attempt 1.
 		//code segment above references delete-posts.js, will make a file for 
 		//best response
-		//Code links successfully to topic-menu-list.tpl when using [component="topic/best-response below"]
+		//Code links successfully to topic-menu-list.tpl when using [component="topic/best-response"] below
 		topicContainer.on('click', '[component="topic/best-response"]', function (){
 			//Modify code below
-			require(['forum/topic/delete-posts'], function (deletePosts) {
+			require(['forum/topic/best-response'], function (deletePosts) {
 				deletePosts.init();
 			});
 		});

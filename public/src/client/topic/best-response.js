@@ -1,6 +1,6 @@
 'use strict';
 
-define('forum/topic/best-response', [
+define('forum/topic/delete-posts', [
     'postSelect', 'alerts', 'api',
 ], function (postSelect, alerts, api) {
     const DeletePosts = {};
@@ -17,12 +17,14 @@ define('forum/topic/best-response', [
         if (modal) {
             return;
         }
-
-        app.parseAndTranslate('modals/delete-posts', {}, function (html) {
+        //Below is how this file links to the tpl file and how it represents it
+        //modified file below to redirect to best-response.tpl
+        app.parseAndTranslate('modals/best-response', {}, function (html) {
             modal = html;
 
             $('body').append(modal);
 
+            //These are the buttons that are on the modal (other than close)
             deleteBtn = modal.find('#delete_posts_confirm');
             purgeBtn = modal.find('#purge_posts_confirm');
 
@@ -34,9 +36,11 @@ define('forum/topic/best-response', [
             });
             showPostsSelected();
 
+            //Linking the buttons to the functionality
             deleteBtn.on('click', function () {
                 deletePosts(deleteBtn, pid => `/posts/${pid}/state`);
             });
+            //ignore the purge button from now
             purgeBtn.on('click', function () {
                 deletePosts(purgeBtn, pid => `/posts/${pid}`);
             });
@@ -50,7 +54,8 @@ define('forum/topic/best-response', [
         }
     }
 
-    function markPost(btn, route) {
+    //Edit this function to mark a post as the best response 
+    function deletePosts(btn, route) {
         btn.attr('disabled', true);
         Promise.all(postSelect.pids.map(pid => api.del(route(pid), {})))
             .then(closeModal)
@@ -69,7 +74,7 @@ define('forum/topic/best-response', [
     }
 
     function checkButtonEnable() {
-        if (postSelect.pids.length) {
+        if (postSelect.pids.length==1) {
             deleteBtn.removeAttr('disabled');
             purgeBtn.removeAttr('disabled');
         } else {
