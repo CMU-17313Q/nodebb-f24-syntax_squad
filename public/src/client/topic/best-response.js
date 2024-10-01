@@ -5,7 +5,7 @@ define('forum/topic/delete-posts', [
 ], function (postSelect, alerts, api) {
     const DeletePosts = {};
     let modal;
-    let deleteBtn;
+    let markBtn;
     let purgeBtn;
     let tid;
 
@@ -25,10 +25,10 @@ define('forum/topic/delete-posts', [
             $('body').append(modal);
 
             //These are the buttons that are on the modal (other than close)
-            deleteBtn = modal.find('#delete_posts_confirm');
+            markBtn = modal.find('#markResponse_posts_confirm');
             purgeBtn = modal.find('#purge_posts_confirm');
 
-            modal.find('#delete_posts_cancel').on('click', closeModal);
+            modal.find('#markResponse_posts_cancel').on('click', closeModal);
 
             postSelect.init(function () {
                 checkButtonEnable();
@@ -37,12 +37,13 @@ define('forum/topic/delete-posts', [
             showPostsSelected();
 
             //Linking the buttons to the functionality
-            deleteBtn.on('click', function () {
-                deletePosts(deleteBtn, pid => `/posts/${pid}/state`);
+            markBtn.on('click', function () {
+                console.log('Clicked on mark');
+                markBestResponse(markBtn, pid => `/posts/${pid}/state`);
             });
             //ignore the purge button from now
             purgeBtn.on('click', function () {
-                deletePosts(purgeBtn, pid => `/posts/${pid}`);
+                markBestResponse(purgeBtn, pid => `/posts/${pid}`);
             });
         });
     };
@@ -55,8 +56,10 @@ define('forum/topic/delete-posts', [
     }
 
     //Edit this function to mark a post as the best response 
-    function deletePosts(btn, route) {
+    function markBestResponse(btn, route) {
         btn.attr('disabled', true);
+        //-Change the function below to mark as a best response here in the UI
+        console.log('marked');
         Promise.all(postSelect.pids.map(pid => api.del(route(pid), {})))
             .then(closeModal)
             .catch(alerts.error)
@@ -72,13 +75,13 @@ define('forum/topic/delete-posts', [
             modal.find('#pids').translateHtml('[[topic:fork-no-pids]]');
         }
     }
-
+    //Made sure you can only mark one post at a time in the UI
     function checkButtonEnable() {
         if (postSelect.pids.length==1) {
-            deleteBtn.removeAttr('disabled');
+            markBtn.removeAttr('disabled');
             purgeBtn.removeAttr('disabled');
         } else {
-            deleteBtn.attr('disabled', true);
+            markBtn.attr('disabled', true);
             purgeBtn.attr('disabled', true);
         }
     }

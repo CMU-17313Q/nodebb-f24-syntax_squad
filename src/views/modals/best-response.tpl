@@ -9,7 +9,7 @@
         <p><strong><span id="pids"></span></strong></p>
     </div>
     <div class="card-footer text-end">
-        <button class="btn btn-link btn-sm" id="delete_posts_cancel">[[global:buttons.close]]</button>
-        <button class="btn btn-primary btn-sm" id="delete_posts_confirm" disabled>[[topic:delete]]</button>
+        <button class="btn btn-link btn-sm" id="markResponse_posts_cancel">[[global:buttons.close]]</button>
+        <button class="btn btn-primary btn-sm" id="markResponse_posts_confirm" disabled>Mark</button>
     </div>
 </div>
