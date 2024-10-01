@@ -17,14 +17,14 @@ define('forum/topic/delete-posts', [
 		if (modal) {
 			return;
 		}
-		//Below is how this file links to the tpl file and how it represents it
-		//modified file below to redirect to best-response.tpl
+		// Below is how this file links to the tpl file and how it represents it
+		// modified file below to redirect to best-response.tpl
 		app.parseAndTranslate('modals/best-response', {}, function (html) {
 			modal = html;
 
 			$('body').append(modal);
 
-			//These are the buttons that are on the modal (other than close)
+			// These are the buttons that are on the modal (other than close)
 			markBtn = modal.find('#markResponse_posts_confirm');
 			purgeBtn = modal.find('#purge_posts_confirm');
 
@@ -36,12 +36,12 @@ define('forum/topic/delete-posts', [
 			});
 			showPostsSelected();
 
-			//Linking the buttons to the functionality
+			// Linking the buttons to the functionality
 			markBtn.on('click', function () {
 				console.log('Clicked on mark');
 				markBestResponse(markBtn, pid => `/posts/${pid}/state`);
 			});
-			//ignore the purge button from now
+			// ignore the purge button from now
 			purgeBtn.on('click', function () {
 				markBestResponse(purgeBtn, pid => `/posts/${pid}`);
 			});
@@ -55,10 +55,10 @@ define('forum/topic/delete-posts', [
 		}
 	}
 
-	//Edit this function to mark a post as the best response 
+	// Edit this function to mark a post as the best response
 	function markBestResponse(btn, route) {
 		btn.attr('disabled', true);
-		//-Change the function below to mark as a best response here in the UI
+		// -Change the function below to mark as a best response here in the UI
 		console.log('marked');
 		Promise.all(postSelect.pids.map(pid => api.del(route(pid), {})))
 			.then(closeModal)
@@ -75,9 +75,9 @@ define('forum/topic/delete-posts', [
 			modal.find('#pids').translateHtml('[[topic:fork-no-pids]]');
 		}
 	}
-	//Made sure you can only mark one post at a time in the UI
+	// Made sure you can only mark one post at a time in the UI
 	function checkButtonEnable() {
-		if (postSelect.pids.length==1) {
+		if (postSelect.pids.length == 1) {
 			markBtn.removeAttr('disabled');
 			purgeBtn.removeAttr('disabled');
 		} else {
