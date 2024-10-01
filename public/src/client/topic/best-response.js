@@ -77,7 +77,7 @@ define('forum/topic/delete-posts', [
 	}
 	// Made sure you can only mark one post at a time in the UI
 	function checkButtonEnable() {
-		if (postSelect.pids.length == 1) {
+		if (postSelect.pids.length === 1) {
 			markBtn.removeAttr('disabled');
 			purgeBtn.removeAttr('disabled');
 		} else {
