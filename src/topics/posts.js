@@ -165,7 +165,11 @@ module.exports = function (Topics) {
 
 		postData.forEach((postObj, i) => {
 			if (postObj) {
-				postObj.user = postObj.uid ? userData[postObj.uid] : { ...userData[postObj.uid] };
+				if (postObj.isAnonymous) {
+					postObj.user = { username: 'Anonymous', displayname: 'Anonymous' };
+				} else {
+					postObj.user = postObj.uid ? userData[postObj.uid] : { ...userData[postObj.uid] };
+				}
 				postObj.editor = postObj.editor ? editors[postObj.editor] : null;
 				postObj.bookmarked = bookmarks[i];
 				postObj.upvoted = voteData.upvotes[i];
@@ -173,12 +177,10 @@ module.exports = function (Topics) {
 				postObj.votes = postObj.votes || 0;
 				postObj.replies = replies[i];
 				postObj.selfPost = parseInt(uid, 10) > 0 && parseInt(uid, 10) === postObj.uid;
-
+		
 				console.log(postObj);
 				console.log('hello');
-
-
-
+		
 				// Username override for guests, if enabled
 				if (meta.config.allowGuestHandles && postObj.uid === 0 && postObj.handle) {
 					postObj.user.username = validator.escape(String(postObj.handle));

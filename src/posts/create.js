@@ -31,7 +31,7 @@ module.exports = function (Posts) {
 		const pid = await db.incrObjectField('global', 'nextPid');
 		let postData = {
 			pid: pid,
-			uid: anonymous ? null : uid,  // Set uid to 0 if anonymous
+			uid: anonymous ? 0 : uid,  // Set uid to 0 if anonymous
 			tid: tid,
 			content: content,
 			timestamp: timestamp,
@@ -40,7 +40,10 @@ module.exports = function (Posts) {
 
 		// Check if the post is anonymous and set username accordingly
 		if (anonymous) {
-			postData.username = 'Anonymous';  // Add anonymous username
+			user.username = 'Anonymous';  // Add anonymous username
+			user.displayname = 'Anonymous';  // Add anonymous displayname
+			postData.username = user.username;
+			postData.displayname = user.display
 		} else {
 			const userData = await user.getUserFields(uid, ['username']);
 			postData.username = userData.username;
