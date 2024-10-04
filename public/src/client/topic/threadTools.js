@@ -116,8 +116,8 @@ define('forum/topic/threadTools', [
 		// Code links successfully to topic-menu-list.tpl when using [component="topic/best-response"] below
 		topicContainer.on('click', '[component="topic/best-response"]', function () {
 			// Modify code below
-			require(['forum/topic/best-response'], function (deletePosts) {
-				deletePosts.init();
+			require(['forum/topic/best-response'], function (BestPost) {
+				BestPost.init();
 			});
 		});
 

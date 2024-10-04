@@ -1,15 +1,15 @@
 'use strict';
 
-define('forum/topic/delete-posts', [
+define('forum/topic/best-response', [
 	'postSelect', 'alerts', 'api',
 ], function (postSelect, alerts, api) {
-	const DeletePosts = {};
+	const BestResponse = {};
 	let modal;
 	let markBtn;
 	let purgeBtn;
 	let tid;
 
-	DeletePosts.init = function () {
+	BestResponse.init = function () {
 		tid = ajaxify.data.tid;
 
 		$(window).off('action:ajaxify.end', onAjaxifyEnd).on('action:ajaxify.end', onAjaxifyEnd);
@@ -38,13 +38,12 @@ define('forum/topic/delete-posts', [
 
 			// Linking the buttons to the functionality
 			markBtn.on('click', function () {
-				console.log('Clicked on mark');
-				markBestResponse(markBtn, pid => `/posts/${pid}/state`);
-			});
-			// ignore the purge button from now
-			purgeBtn.on('click', function () {
-				markBestResponse(purgeBtn, pid => `/posts/${pid}`);
-			});
+				console.log('Mark button clicked');
+                if (postSelect.pids.length === 1) {
+                    markBestResponse(markBtn, pid => `/posts/${pid}/best`);
+                }
+            });
+
 		});
 	};
 
@@ -57,16 +56,22 @@ define('forum/topic/delete-posts', [
 
 	// Edit this function to mark a post as the best response
 	function markBestResponse(btn, route) {
-		btn.attr('disabled', true);
-		// -Change the function below to mark as a best response here in the UI
-		console.log('marked');
-		Promise.all(postSelect.pids.map(pid => api.del(route(pid), {})))
-			.then(closeModal)
-			.catch(alerts.error)
-			.finally(() => {
-				btn.removeAttr('disabled');
-			});
-	}
+        btn.attr('disabled', true);
+        const postId = postSelect.pids[0]; // Get the selected post ID
+        console.log('Marking post as best response:', postId);
+        
+        // Call the API to mark the post as the best
+        api.post(route(postId), {})
+            .then(() => {
+                alerts.success('Post marked as best response!');
+                closeModal();
+                // Optionally, refresh the page or update the UI to reflect the change
+            })
+            .catch(alerts.error)
+            .finally(() => {
+                btn.removeAttr('disabled');
+            });
+    }
 
 	function showPostsSelected() {
 		if (postSelect.pids.length) {
@@ -94,5 +99,5 @@ define('forum/topic/delete-posts', [
 		}
 	}
 
-	return DeletePosts;
+	return BestResponse;
 });
