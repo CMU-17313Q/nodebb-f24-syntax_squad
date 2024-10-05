@@ -386,7 +386,7 @@ topicsController.search = async function (req, res) {
 }  */
 
 
-async function render(req, res, data) {
+/* async function render(req, res, data) {
 	console.log("data in render function in src/controllers/topics.js: ", data);
 	
 	// Filter the array to remove anything that's not a post
@@ -400,10 +400,10 @@ async function render(req, res, data) {
 	// Render the partials/topic/post template with only posts
 	res.render('partials/topic/post', { posts, pagination, section_joindate: data.section_joindate });
 	//res.render('partials/topic/post', {posts});
-}
+} */
 	
 
-/* async function render(req, res, data) {
+	async function render(req, res, data) {
     console.log("data in render function in src/controllers/topics.js: ", data);
 
     // Pass only the posts directly to the template
@@ -417,7 +417,7 @@ async function render(req, res, data) {
     // Render the partials/topic/post template with only posts
     res.render('partials/topic/post', { posts, pagination, section_joindate: data.section_joindate });
 }
- */
+
 // res.render('partials/topic/post', posts);
 
 /* async function render(req, res, data) {
