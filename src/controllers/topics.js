@@ -14,7 +14,7 @@ const helpers = require('./helpers');
 const pagination = require('../pagination');
 const utils = require('../utils');
 const analytics = require('../analytics');
-
+const api = require('../api'); // for search 
 const topicsController = module.exports;
 
 const url = nconf.get('url');
@@ -354,6 +354,77 @@ function addOGImageTag(res, image) {
 		});
 	}
 }
+
+//const topicsAPI = require('../api/topics');  // Add this line to import topicsAPI
+
+// write this after the 404 api route not found error is fixed 
+// write this after 500 api is not defined error is fixed 
+// ignore this function for now, does not affect 500 error 
+topicsController.search = async function (req, res) {
+	//console.log("in topicsController.search, req.query: ", req.query);
+	console.log("in topicsController.search, req.query: ", req.query);
+	const searchData = await api.topics.search(req, req.query);
+	console.log("searchData in topicsController.search from api function: ", searchData);
+
+	const section = req.query.section || 'joindate';
+
+	searchData.pagination = pagination.create(req.query.page, searchData.pageCount, req.query);
+	searchData[`section_${section}`] = true;
+	//searchData.displayUserSearch = true;
+	await render(req, res, searchData);
+};  
+
+/* async function render(req, res, data) {
+	console.log("data in render function in src/controllers/topics.js: ", data);
+
+	// Ensure you are passing the posts correctly to the template
+ 	const posts = data.posts || [];
+	const pagination = data.pagination || {};
+
+	// Pass only the necessary data to the template
+	res.render('partials/topic/post', { posts, pagination, section_joindate: data.section_joindate });
+}  */
+
+
+async function render(req, res, data) {
+	console.log("data in render function in src/controllers/topics.js: ", data);
+	
+	// Filter the array to remove anything that's not a post
+	const posts = Array.isArray(data) ? data.filter(item => item.pid) : []; 
+	console.log("***********start of posts print");
+	console.log("postsss: ", posts); // Now 'posts' is just an array of post objects
+	console.log("***********end of posts print");
+	
+	const pagination = data.pagination || {}; // Assuming pagination is managed elsewhere
+	
+	// Render the partials/topic/post template with only posts
+	res.render('partials/topic/post', { posts, pagination, section_joindate: data.section_joindate });
+	//res.render('partials/topic/post', {posts});
+}
+	
+
+/* async function render(req, res, data) {
+    console.log("data in render function in src/controllers/topics.js: ", data);
+
+    // Pass only the posts directly to the template
+    //const posts = data || []; // Now data is an array of posts
+	console.log("***********start of posts print");
+	const posts = data || []; // Now data is an array of posts
+	console.log("postsss: ", posts);
+	console.log("***********end of posts print");
+    const pagination = {}; // Assuming you manage pagination elsewhere
+
+    // Render the partials/topic/post template with only posts
+    res.render('partials/topic/post', { posts, pagination, section_joindate: data.section_joindate });
+}
+ */
+// res.render('partials/topic/post', posts);
+
+/* async function render(req, res, data) {
+	console.log("data in render function in src/controllers/topics.js: ", data);
+	//res.render('topic', data);
+	res.render('partials/topic/post', data);
+} */
 
 topicsController.teaser = async function (req, res, next) {
 	const tid = req.params.topic_id;

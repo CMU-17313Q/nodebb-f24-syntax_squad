@@ -53,67 +53,6 @@ describe('Topic\'s', () => {
 		};
 	});
 
-	/* describe('.search()', () => {
-		// let topic;
-		let adminUid;
-
-		before(async () => {
-			adminUid = await User.create({ username: 'admin' });
-			const categoryObj = await categories.create({
-				name: 'Test Category',
-				description: 'Test category created by testing script',
-			});
-
-			topic = {
-				userId: adminUid,
-				categoryId: categoryObj.cid,
-				title: 'Test Topic Title',
-				content: 'The content of test topic',
-			};
-
-			// create a topic first
-			topic.tid = await topics.create({
-				uid: adminUid,
-				title: topic.title,
-				content: topic.content,
-				cid: categoryObj.cid,
-			});
-
-			// create posts in the topic for testing
-			const post1 = await posts.create({ uid: adminUid, tid: topic.tid, content: 'First post in topic' });
-			posts.create({ uid: adminUid, tid: topic.tid, content: 'Another post about testing' });
-			posts.create({ uid: adminUid, tid: topic.tid, content: 'Post with a different keyword' });
-
-			// checking if post has been created properly
-			console.log('post1:', post1);
-		});
-
-		it('should return all posts if the query is empty', async () => {
-			console.log('*****************************');
-			// checking if topic and topic.tid created properly
-			console.log('topic:', topic);
-			console.log('topic.tid:', topic.tid);
-			topic.postsearch({ query: '' }, (err, searchData) => {
-				console.log('searchData:', searchData);
-				assert.ifError(err);
-				assert.equal(searchData.matchCount, 3);
-				assert.equal(searchData.posts.length, 3);
-			});
-		});
-
-		it('should return all posts matching user query', async () => {
-			console.log('*****************************');
-			console.log('topic:', topic);
-			console.log('topic.tid:', topic.tid);
-			topic.postsearch({ query: 'another' }, (err, searchData) => {
-				console.log('searchData:', searchData);
-				assert.ifError(err);
-				assert.equal(searchData.matchCount, 1);
-				assert.equal(searchData.posts.length, 1);
-			});
-		});
-	}); */
-
 	describe('.post', () => {
 		it('should fail to create topic with invalid data', async () => {
 			try {
@@ -2565,6 +2504,53 @@ describe('Topic\'s', () => {
 			assert(!score);
 		});
 	});
+
+	describe('.search()', () => {
+		let adminUid;
+		before(async () => {
+			adminUid = await User.create({ username: 'admin' });
+			const categoryObj = await categories.create({
+				name: 'Test Category',
+				description: 'Test category created by testing script',
+			});
+	
+			topic = {
+				userId: adminUid,
+				categoryId: categoryObj.cid,
+				title: 'Test Topic Title',
+				content: 'The content of test topic',
+			};
+	
+			// Create a topic first
+			topic.tid = await topics.create({
+				uid: adminUid,
+				title: topic.title,
+				content: topic.content,
+				cid: categoryObj.cid,
+			});
+		});
+	
+		it('should return all posts matching user query', async () => {
+			//console.log('*****************************');
+			//console.log('topic:', topic);
+			//console.log('topic.tid:', topic.tid);
+			const searchData = await topics.postSearch({ query: 'blocked' });
+			//console.log('searchData:', searchData);
+			assert.equal(searchData.matchCount, 1);
+			assert.equal(searchData.posts.length, 1);
+		});
+	
+		it('should return all posts if the query is empty', async () => {
+			//console.log('*****************************');
+			//console.log('topic:', topic);
+			//console.log('topic.tid:', topic.tid);
+			const searchData = await topics.postSearch({ query: '' });
+			//console.log('searchData:', searchData);
+			assert.equal(searchData.matchCount, 2);
+			assert.equal(searchData.posts.length, 2);
+		});
+	});
+	
 });
 
 describe('Topics\'', async () => {

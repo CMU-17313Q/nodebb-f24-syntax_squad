@@ -32,16 +32,21 @@ usersController.index = async function (req, res, next) {
 	}
 };
 
+// if this is commented out, the search DOESNT WORK but theres no error 
 usersController.search = async function (req, res) {
-	const searchData = await api.users.search(req, req.query);
+	// this one line makes controller connect to API function 
+	// searchData = searchResult, the return of the main search function
+  	//console.log("in usersController.search, req.query: ", req.query);
+   	const searchData = await api.users.search(req, req.query);
+ 	//console.log("searchData: ", searchData); //  { matchCount: 0, pageCount: 0, timing: '0.00', users: [] }
 
 	const section = req.query.section || 'joindate';
 
 	searchData.pagination = pagination.create(req.query.page, searchData.pageCount, req.query);
 	searchData[`section_${section}`] = true;
 	searchData.displayUserSearch = true;
-	await render(req, res, searchData);
-};
+	await render(req, res, searchData);     
+}; 
 
 usersController.getOnlineUsers = async function (req, res) {
 	const [userData, guests] = await Promise.all([
@@ -189,7 +194,7 @@ usersController.getUsersAndCount = async function (set, uid, start, stop) {
 };
 
 async function render(req, res, data) {
-	const { registrationType } = meta.config;
+ 	const { registrationType } = meta.config;
 
 	data.maximumInvites = meta.config.maximumInvites;
 	data.inviteOnly = registrationType === 'invite-only' || registrationType === 'admin-invite-only';
@@ -206,6 +211,6 @@ async function render(req, res, data) {
 
 	data['reputation:disabled'] = meta.config['reputation:disabled'];
 
-	res.append('X-Total-Count', data.userCount);
+	res.append('X-Total-Count', data.userCount); 
 	res.render('users', data);
 }
