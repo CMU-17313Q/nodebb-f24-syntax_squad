@@ -8,6 +8,7 @@ const posts = require('../../posts');
 const api = require('../../api');
 const helpers = require('../helpers');
 
+
 const Posts = module.exports;
 
 Posts.redirectByIndex = async (req, res, next) => {
@@ -97,6 +98,23 @@ Posts.restore = async (req, res) => {
 Posts.delete = async (req, res) => {
 	await api.posts.delete(req, { pid: req.params.pid });
 	helpers.formatApiResponse(200, res);
+};
+
+// Add function to mark post as best response
+Posts.markAsBestResponse = async (req, res) => {
+    const postId = req.params.pid; // Get the post ID from the request parameters
+	console.log(`Attempting to mark post as best response in the controller: ${postId}`);
+
+    try {
+        // Mark the post as the best response without permission checks
+        await posts.markPostAsBest(postId); // Call the service to update the post in the database
+
+        // Return a success response
+        helpers.formatApiResponse(200, res, { message: 'Post marked as best response!' });
+    } catch (error) {
+        // Handle any errors that may occur during the process
+        helpers.formatApiResponse(400, res, error);
+    }
 };
 
 Posts.move = async (req, res) => {
