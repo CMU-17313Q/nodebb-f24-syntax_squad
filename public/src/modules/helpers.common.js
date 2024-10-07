@@ -1,5 +1,7 @@
 'use strict';
 
+const { post } = require("jquery");
+
 module.exports = function (utils, Benchpress, relative_path) {
 	Benchpress.setGlobal('true', true);
 	Benchpress.setGlobal('false', false);
@@ -282,20 +284,23 @@ module.exports = function (utils, Benchpress, relative_path) {
 
 		return icons;
 	}
-	function buildAvatar(userObj, postObj, size, rounded, classNames, component) {
+	function buildAvatar(userObj, size, rounded, classNames, component) {
+		/**
+		 * userObj requires:
+		 *   - uid, picture, icon:bgColor, icon:text (getUserField w/ "picture" should return all 4), username
+		 * size: a picture size in the form of a value with units (e.g. 64px, 4rem, etc.)
+		 * rounded: true or false (optional, default false)
+		 * classNames: additional class names to prepend (optional, default none)
+		 * component: overrides the default component (optional, default none)
+		 */
+
+		// Try to use root context if passed-in userObj is undefined
 		if (!userObj) {
 			userObj = this;
 		}
 		classNames = classNames || '';
-		const isAnonymous = postObj.isAnonymous; // Checking postObj for anonymity
-	
-		const username = isAnonymous ? 'Anonymous' : userObj.username;
-		const picture = !isAnonymous ? userObj.picture : null; // Use picture if not anonymous
-		const iconText = isAnonymous ? '?' : userObj['icon:text'];
-		const bgColor = userObj['icon:bgColor'];
-	
 		const attributes = new Map([
-			['title', username],
+			['title', userObj.username],
 			['data-uid', userObj.uid],
 			['class', `avatar ${classNames}${rounded ? ' avatar-rounded' : ''}`],
 		]);
@@ -304,21 +309,17 @@ module.exports = function (utils, Benchpress, relative_path) {
 			output += ` ${prop}="${value}"`;
 			return output;
 		}, '');
-	
+
 		let output = '';
-	
-		if (picture) {
-			// Use the user's picture if not anonymous
-			output += `<img${attr2String(attributes)} alt="${username}" loading="lazy" component="${component || 'avatar/picture'}" src="${picture}" style="${styles.join(' ')}" onError="this.remove()" itemprop="image" />`;
-		} else {
-			// Display a default "?" avatar when anonymous
-			output += `<span${attr2String(attributes)} component="${component || 'avatar/icon'}" style="${styles.join(' ')} background-color: ${bgColor}; font-size: ${size}; display: flex; align-items: center; justify-content: center;">?</span>`;
+
+		if (userObj.picture) {
+			output += `<img${attr2String(attributes)} alt="${userObj.username}" loading="lazy" component="${component || 'avatar/picture'}" src="${userObj.picture}" style="${styles.join(' ')}" onError="this.remove()" itemprop="image" />`;
 		}
-		output += `<span${attr2String(attributes)} component="${component || 'avatar/icon'}" style="${styles.join(' ')} background-color: ${bgColor}">${iconText}</span>`;
+		output += `<span${attr2String(attributes)} component="${component || 'avatar/icon'}" style="${styles.join(' ')} background-color: ${userObj['icon:bgColor']}">${userObj['icon:text']}</span>`;
 		return output;
 	}
 	
-
+	
 	function increment(value, inc) {
 		return String(value + parseInt(inc, 10));
 	}

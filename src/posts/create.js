@@ -1,6 +1,8 @@
 'use strict';
 
 const _ = require('lodash');
+const fs = require('fs');
+const path = require('path');
 const meta = require('../meta');
 const db = require('../database');
 const plugins = require('../plugins');
@@ -10,15 +12,16 @@ const categories = require('../categories');
 const groups = require('../groups');
 const privileges = require('../privileges');
 
+
 module.exports = function (Posts) {
 	Posts.create = async function (data) {
 		// This is an internal method, consider using Topics.reply instead
 		const { uid } = data;
 		const { tid } = data;
-		const content = data.content.toString();
+		// eslint-disable-next-line prefer-const
+		let content = data.content.toString();
 		const timestamp = data.timestamp || Date.now();
 		const isMain = data.isMain || false;
-		const anonymous = data.isAnonymous || false;
 
 		if (!uid && parseInt(uid, 10) !== 0) {
 			throw new Error('[[error:invalid-uid]]');
@@ -27,27 +30,16 @@ module.exports = function (Posts) {
 		if (data.toPid) {
 			await checkToPid(data.toPid, uid);
 		}
-
+		
 		const pid = await db.incrObjectField('global', 'nextPid');
 		let postData = {
 			pid: pid,
-			uid: anonymous ? 0 : uid,  // Set uid to 0 if anonymous
+			uid: uid,
 			tid: tid,
-			content: content,
+			content: data.content,
 			timestamp: timestamp,
-			anonymous: anonymous,
+			anonymous: data.isAnonymous,
 		};
-
-		// Check if the post is anonymous and set username accordingly
-		if (anonymous) {
-			user.username = 'Anonymous';  // Add anonymous username
-			user.displayname = 'Anonymous';  // Add anonymous displayname
-			postData.username = user.username;
-			postData.displayname = user.display
-		} else {
-			const userData = await user.getUserFields(uid, ['username']);
-			postData.username = userData.username;
-		}
 
 		if (data.toPid) {
 			postData.toPid = data.toPid;
