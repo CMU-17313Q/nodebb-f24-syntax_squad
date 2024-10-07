@@ -93,7 +93,7 @@ module.exports = function (Topics) {
 	};
 
 	async function toggleLock(tid, uid, lock) {
-		const topicData = await Topics.getTopicFields(tid, ['tid', 'uid', 'cid']);
+		const topicData = await Topics.getTopicFields(tid, ['tid', 'uid', 'cid', 'bestResponse']);
 		if (!topicData || !topicData.cid) {
 			throw new Error('[[error:no-topic]]');
 		}
@@ -123,7 +123,7 @@ module.exports = function (Topics) {
 			throw new Error('[[error:invalid-data]]');
 		}
 
-		const topicData = await Topics.getTopicFields(tid, ['tid', 'uid', 'cid']);
+		const topicData = await Topics.getTopicFields(tid, ['tid', 'uid', 'cid', 'bestResponse']);
 		const isAdminOrMod = await privileges.categories.isAdminOrMod(topicData.cid, uid);
 		if (!isAdminOrMod) {
 			throw new Error('[[error:no-privileges]]');

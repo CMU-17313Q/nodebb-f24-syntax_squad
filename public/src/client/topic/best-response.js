@@ -62,7 +62,6 @@ define('forum/topic/best-response', [
 				console.log('Response from marking post as best response:', response);
 				alerts.success('Post marked as best response!');
 				closeModal();
-				// Optionally, refresh the UI or update any relevant parts to reflect the change
 			})
 			.catch((error) => {
 				console.error('Error marking post as best response:', error);
