@@ -98,26 +98,23 @@ async function validatePost(data, meta, contentLen, caller) {
 	}
 }
 
-// Add function to mark as best post
+// Correct indentation for the block around line 102
 postsAPI.markAsBestResponse = async function (caller, data) {
+	if (!data || !data.pid) {
+		throw new Error('[[error:invalid-data]]');
+	}
+	
+	try {
+		// Mark the post as best response
+		await posts.markPostAsBest(data.pid);
 
-    // Ensure that data and pid are valid
-    if (!data || !data.pid) {
-        throw new Error('[[error:invalid-data]]');
-    }
-
-    try {
-        // Mark the post as best response
-        await posts.markPostAsBest(data.pid);
-
-        // Return a success message
-        return { message: 'Post marked as best response!' };
-    } catch (error) {
-        // Handle any errors that may occur during the process
-        throw new Error('[[error:could-not-mark-best-response]]');
-    }
+		// Return a success message
+		return { message: 'Post marked as best response!' };
+	} catch (error) {
+		// Handle any errors that may occur during the process
+		throw new Error('[[error:could-not-mark-best-response]]');
+	}
 };
-
 
 postsAPI.edit = async function (caller, data) {
 	if (!data || !data.pid || (meta.config.minimumPostLength !== 0 && !data.content)) {

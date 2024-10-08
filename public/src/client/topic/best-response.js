@@ -55,7 +55,7 @@ define('forum/topic/best-response', [
 		
 		// Call the API to mark the post as the best using PUT
 		api.put(route(postId), { postId: postId }) // Send the selected post ID to the server
-			.then((response) => {
+			.then(() => {  // Removed unused 'response' parameter
 				alerts.success('Post marked as best response!');
 				closeModal();
 			})
