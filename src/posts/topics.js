@@ -52,4 +52,23 @@ module.exports = function (Posts) {
 
 		return paths;
 	};
+
+	Posts.markPostAsBest = async function (pid) {
+		console.log('markPostAsBest function is called');
+		
+		// Get the topic ID associated with the post
+		const post = await Posts.getPostFields(pid, ['tid']);
+		const tid = post.tid;
+	
+		// Set the best response for the topic
+		await db.setObjectField(`topic:${tid}`, 'bestResponse', pid);
+	
+		// Retrieve the updated topic data
+		const updatedTopicData = await db.getObject(`topic:${tid}`);
+		console.log('BBBBBest response PID set for topic:', tid, 'to post:', pid);
+		console.log('UUUUUUpdated topic data:', updatedTopicData);
+	
+		return { success: true, topic: updatedTopicData };  // Return full topic data
+	};
+	
 };

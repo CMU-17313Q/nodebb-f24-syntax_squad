@@ -33,16 +33,19 @@ module.exports = function (Topics) {
 			lastposttime: 0,
 			postcount: 0,
 			viewcount: 0,
-			bestResponse: null, // Add the bestResponse variable here, initialized to null
+			bestResponse: -1, // Add the bestResponse variable here, initialized to null
 		};
 
 		if (Array.isArray(data.tags) && data.tags.length) {
 			topicData.tags = data.tags.join(',');
 		}
 
+		console.log('Topic Data before saving:', topicData); // Add this logs
+
 		const result = await plugins.hooks.fire('filter:topic.create', { topic: topicData, data: data });
 		topicData = result.topic;
 		await db.setObject(`topic:${topicData.tid}`, topicData);
+		console.log('Topic Data saved in DB:', await db.getObject(`topic:${topicData.tid}`));
 
 		const timestampedSortedSetKeys = [
 			'topics:tid',
