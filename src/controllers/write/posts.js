@@ -103,19 +103,27 @@ Posts.delete = async (req, res) => {
 // Add function to mark post as best response
 Posts.markAsBestResponse = async (req, res) => {
     const postId = req.params.pid; // Get the post ID from the request parameters
-	console.log(`Attempting to mark post as best response in the controller: ${postId}`);
 
     try {
-        // Mark the post as the best response without permission checks
-        await posts.markPostAsBest(postId); // Call the service to update the post in the database
+        // Retrieve the topic ID (tid) associated with the post
+        const post = await posts.getPostData(postId);
+        const tid = post.tid; // Get the topic ID from the post data
+
+        // Set the bestResponse field to the postId in the topic data
+        await db.setObjectField(`topic:${tid}`, 'bestResponse', postId);
+
+        // Retrieve and print the updated bestResponse field from the topic
+        const bestResponse = await db.getObjectField(`topic:${tid}`, 'bestResponse');
 
         // Return a success response
         helpers.formatApiResponse(200, res, { message: 'Post marked as best response!' });
     } catch (error) {
         // Handle any errors that may occur during the process
+        console.error('Error marking post as best response:', error);
         helpers.formatApiResponse(400, res, error);
     }
 };
+
 
 Posts.move = async (req, res) => {
 	await api.posts.move(req, {

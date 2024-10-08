@@ -34,7 +34,6 @@ define('forum/topic/best-response', [
             showPostsSelected();
 
             markBtn.on('click', function () {
-                console.log('Mark button clicked');
                 if (postSelect.pids.length === 1) {
                     markBestResponse(markBtn, pid => `/posts/${pid}/best`);
                 }
@@ -54,12 +53,10 @@ define('forum/topic/best-response', [
 	function markBestResponse(btn, route) {
 		btn.attr('disabled', true);
 		const postId = postSelect.pids[0]; // Get the selected post ID
-		console.log('Marking post as best response:', postId);
 		
 		// Call the API to mark the post as the best using PUT
 		api.put(route(postId), { postId: postId }) // Send the selected post ID to the server
 			.then((response) => {
-				console.log('Response from marking post as best response:', response);
 				alerts.success('Post marked as best response!');
 				closeModal();
 			})

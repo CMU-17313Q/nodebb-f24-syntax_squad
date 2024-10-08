@@ -40,12 +40,9 @@ module.exports = function (Topics) {
 			topicData.tags = data.tags.join(',');
 		}
 
-		console.log('Topic Data before saving:', topicData); // Add this logs
-
 		const result = await plugins.hooks.fire('filter:topic.create', { topic: topicData, data: data });
 		topicData = result.topic;
 		await db.setObject(`topic:${topicData.tid}`, topicData);
-		console.log('Topic Data saved in DB:', await db.getObject(`topic:${topicData.tid}`));
 
 		const timestampedSortedSetKeys = [
 			'topics:tid',

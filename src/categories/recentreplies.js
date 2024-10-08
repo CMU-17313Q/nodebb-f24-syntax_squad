@@ -97,18 +97,11 @@ module.exports = function (Categories) {
 	async function getTopics(tids, uid) {
 		const topicData = await topics.getTopicsFields(
 			tids,
-			['tid', 'mainPid', 'slug', 'title', 'teaserPid', 'cid', 'postcount','bestResponse'] // include best response
+			['tid', 'mainPid', 'slug', 'title', 'teaserPid', 'cid', 'postcount']
 		);
 		topicData.forEach((topic) => {
 			if (topic) {
 				topic.teaserPid = topic.teaserPid || topic.mainPid;
-		
-				// Ensure bestResponse is handled
-				if (topic.bestResponse) {
-					console.log('Best response for topic:', topic.tid, 'is post:', topic.bestResponse);
-				} else {
-					topic.bestResponse = null; // Initialize it to null if not already set
-				}
 			}
 		});
 		const cids = _.uniq(topicData.map(t => t && t.cid).filter(cid => parseInt(cid, 10)));

@@ -101,7 +101,6 @@ async function validatePost(data, meta, contentLen, caller) {
 // Add function to mark as best post
 postsAPI.markAsBestResponse = async function (caller, data) {
 
-	console.log('Attempting to mark post as best response in the api:', data.pid);
     // Ensure that data and pid are valid
     if (!data || !data.pid) {
         throw new Error('[[error:invalid-data]]');

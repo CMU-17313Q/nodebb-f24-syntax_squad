@@ -213,6 +213,8 @@ TopicObjectSlim:
           type: number
         viewcount:
           type: number
+        bestResponse:
+          type: number
         postercount:
           type: number
         scheduled:
