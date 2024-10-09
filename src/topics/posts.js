@@ -355,14 +355,10 @@ module.exports = function (Topics) {
 	// Added this function
 	Topics.markAsBestResponse = async function (pid) {
 		const post = await posts.getPostFields(pid, ['tid']);
-		const tid = post.tid;
-		
+		const { tid } = post;
 		await db.setObjectField(`tid:${tid}`, 'bestResponsePid', pid);
-		
 		return { success: true, message: 'Post marked as best response.' };
 	};
-	
-	
 
 	async function getPostReplies(postData, callerUid) {
 		const pids = postData.map(p => p && p.pid);

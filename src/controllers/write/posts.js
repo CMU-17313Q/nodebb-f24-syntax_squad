@@ -102,27 +102,24 @@ Posts.delete = async (req, res) => {
 
 // Add function to mark post as best response
 Posts.markAsBestResponse = async (req, res) => {
-    const postId = req.params.pid; // Get the post ID from the request parameters
+	const postId = req.params.pid; // Get the post ID from the request parameters
 
-    try {
-        // Retrieve the topic ID (tid) associated with the post
-        const post = await posts.getPostData(postId);
-        const tid = post.tid; // Get the topic ID from the post data
+	try {
+		// Retrieve the topic ID (tid) associated with the post
+		const { tid } = await posts.getPostData(postId); // Use destructuring to get the tid
 
-        // Set the bestResponse field to the postId in the topic data
-        await db.setObjectField(`topic:${tid}`, 'bestResponse', postId);
+		// Set the bestResponse field to the postId in the topic data
+		await db.setObjectField(`topic:${tid}`, 'bestResponse', postId);
 
-        // Retrieve and print the updated bestResponse field from the topic
-        const bestResponse = await db.getObjectField(`topic:${tid}`, 'bestResponse');
-
-        // Return a success response
-        helpers.formatApiResponse(200, res, { message: 'Post marked as best response!' });
-    } catch (error) {
-        // Handle any errors that may occur during the process
-        console.error('Error marking post as best response:', error);
-        helpers.formatApiResponse(400, res, error);
-    }
+		// Return a success response
+		helpers.formatApiResponse(200, res, { message: 'Post marked as best response!' });
+	} catch (error) {
+		// Handle any errors that may occur during the process
+		console.error('Error marking post as best response:', error);
+		helpers.formatApiResponse(400, res, error);
+	}
 };
+
 
 
 Posts.move = async (req, res) => {

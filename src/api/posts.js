@@ -103,11 +103,9 @@ postsAPI.markAsBestResponse = async function (caller, data) {
 	if (!data || !data.pid) {
 		throw new Error('[[error:invalid-data]]');
 	}
-	
 	try {
 		// Mark the post as best response
 		await posts.markPostAsBest(data.pid);
-
 		// Return a success message
 		return { message: 'Post marked as best response!' };
 	} catch (error) {

@@ -1,9 +1,9 @@
-
 'use strict';
 
 const topics = require('../topics');
 const user = require('../user');
 const utils = require('../utils');
+const db = require('../database'); // Ensure db is imported correctly
 
 module.exports = function (Posts) {
 	Posts.getPostsFromSet = async function (set, start, stop, uid, reverse) {
@@ -54,18 +54,12 @@ module.exports = function (Posts) {
 	};
 
 	Posts.markPostAsBest = async function (pid) {
-		
 		// Get the topic ID associated with the post
-		const post = await Posts.getPostFields(pid, ['tid']);
-		const tid = post.tid;
-	
+		const { tid } = await Posts.getPostFields(pid, ['tid']); // Object destructuring
 		// Set the best response for the topic
 		await db.setObjectField(`topic:${tid}`, 'bestResponse', pid);
-	
 		// Retrieve the updated topic data
 		const updatedTopicData = await db.getObject(`topic:${tid}`);
-	
-		return { success: true, topic: updatedTopicData };  // Return full topic data
+		return { success: true, topic: updatedTopicData }; // Return full topic data
 	};
-	
 };

@@ -52,10 +52,9 @@ define('forum/topic/best-response', [
 	function markBestResponse(btn, route) {
 		btn.attr('disabled', true);
 		const postId = postSelect.pids[0]; // Get the selected post ID
-		
 		// Call the API to mark the post as the best using PUT
 		api.put(route(postId), { postId: postId }) // Send the selected post ID to the server
-			.then(() => {  // Removed unused 'response' parameter
+			.then(() => { // Removed unused 'response' parameter
 				alerts.success('Post marked as best response!');
 				closeModal();
 			})
