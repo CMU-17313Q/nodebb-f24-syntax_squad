@@ -127,6 +127,11 @@ Topics.getTopicsByTids = async function (tids, options) {
 	const sortNewToOld = callerSettings.topicPostSort === 'newest_to_oldest';
 	result.topics.forEach((topic, i) => {
 		if (topic) {
+			if(topic.uid == 0){
+				topic.user['icon:text'] = '?';
+				topic.user['icon:bgColor'] = '#aaaaaa';
+			}
+				
 			topic.thumbs = result.thumbs[i];
 			topic.category = result.categoriesMap[topic.cid];
 			topic.user = topic.uid ? result.usersMap[topic.uid] : { ...result.usersMap[topic.uid] };
