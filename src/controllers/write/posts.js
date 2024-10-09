@@ -105,8 +105,12 @@ Posts.markAsBestResponse = async (req, res) => {
 	const postId = req.params.pid; // Get the post ID from the request parameters
 
 	try {
-		// Retrieve the topic ID (tid) associated with the post
-		const { tid } = await posts.getPostData(postId); // Use destructuring to get the tid
+		// Retrieve the post data, including the topic ID (tid) associated with the post
+		const post = await posts.getPostData(postId); // Retrieve full post data
+		const { tid } = post; // Destructure tid from the post object
+
+		// Print the post object
+		console.log('Post object:', post);
 
 		// Set the bestResponse field to the postId in the topic data
 		await db.setObjectField(`topic:${tid}`, 'bestResponse', postId);
@@ -119,6 +123,7 @@ Posts.markAsBestResponse = async (req, res) => {
 		helpers.formatApiResponse(400, res, error);
 	}
 };
+
 
 
 
