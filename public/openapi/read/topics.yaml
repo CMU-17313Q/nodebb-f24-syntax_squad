@@ -122,3 +122,5 @@ get:
       description: Invalid request or missing parameters
     "403":
       description: Insufficient privileges to perform the search
+    "404":
+      description: Unable to find route
