@@ -144,6 +144,16 @@ module.exports = function (Topics) {
 				console.log(postObj);
 				console.log('hello');
 
+				if (postObj.anonymous === 'true') {
+					postObj.user = structuredClone(postObj.user);
+					postObj.user.username = 'Anonymous';
+					postObj.user.userslug = 'Anonymous';
+					postObj.user.uid = 0;
+					postObj.user.displayname = 'Anonymous';
+					postObj.user['icon:text'] = '?';
+					postObj.user['icon:bgColor'] = '#aaaaaa';
+				}
+
 				// Username override for guests, if enabled
 				if (meta.config.allowGuestHandles && postObj.uid === 0 && postObj.handle) {
 					postObj.user.username = validator.escape(String(postObj.handle));
@@ -158,7 +168,7 @@ module.exports = function (Topics) {
 					postObj.user.status = 'away';
 					postObj.user.postcount = 0;
 					postObj.user.topiccount = 0;
-					postObj.user.uid = -1;
+					postObj.user.uid = 0;
 					postObj.user['icon:text'] = '?';
 					postObj.user['icon:bgColor'] = '#aaaaaa';
 				}
