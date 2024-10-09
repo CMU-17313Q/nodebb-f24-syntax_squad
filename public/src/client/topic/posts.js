@@ -16,7 +16,7 @@ define('forum/topic/posts', [
 
 	Posts.signaturesShown = {};
 	const $window = $(window);
-	
+
 	Posts.onNewPost = function (data) {
 		if (
 			!data ||
@@ -448,4 +448,3 @@ define('forum/topic/posts', [
 
 	return Posts;
 });
- 

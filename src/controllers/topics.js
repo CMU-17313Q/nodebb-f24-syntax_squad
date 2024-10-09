@@ -14,7 +14,8 @@ const helpers = require('./helpers');
 const pagination = require('../pagination');
 const utils = require('../utils');
 const analytics = require('../analytics');
-const api = require('../api'); // for search 
+const api = require('../api'); // for search
+
 const topicsController = module.exports;
 
 const url = nconf.get('url');
@@ -88,7 +89,7 @@ topicsController.get = async function getTopic(req, res, next) {
 	}
 	const { start, stop } = calculateStartStop(currentPage, postIndex, settings);
 
-	// here is where topic posts are retrieved 
+	// here is where topic posts are retrieved
 	await topics.getTopicWithPosts(topicData, set, req.uid, start, stop, reverse);
 
 	topics.modifyPostsByPrivilege(topicData, userPrivileges);
@@ -356,13 +357,14 @@ function addOGImageTag(res, image) {
 	}
 }
 
+// replicating topicsController.get in retrieving posts to render them
 topicsController.search = async function (req, res, next) {
-	//console.log("topic_id: ", req.params.topic_id);
-	//const tid = req.params.topic_id;
-	const tid = req.query.tid; 
+	// console.log('topic_id: ', req.params.topic_id);
+	// const tid = req.params.topic_id;
+	const { tid } = req.query;
 	if (!utils.isNumber(tid)) {
-        return next();  // Handle the invalid tid case
-    }
+		return next(); // Handle the invalid tid case
+	}
 	let postIndex = parseInt(req.params.post_index, 10) || 1;
 	const topicData = await topics.getTopicData(tid);
 	if (!topicData) {
@@ -421,10 +423,10 @@ topicsController.search = async function (req, res, next) {
 	}
 	const { start, stop } = calculateStartStop(currentPage, postIndex, settings);
 
-	// here is where topic posts are retrieved 
+	// here is where topic posts are retrieved
 	await topics.getTopicWithPosts(topicData, set, req.uid, start, stop, reverse);
 	const searchData = await api.topics.search(req, req.query);
-	
+
 	topicData.posts = searchData.posts;
 
 	topics.modifyPostsByPrivilege(topicData, userPrivileges);
@@ -473,32 +475,10 @@ topicsController.search = async function (req, res, next) {
 		rel.href = `${url}/topic/${topicData.slug}${rel.href}`;
 		res.locals.linkTags.push(rel);
 	});
-	console.log("***************topicData in topicsController.search**************: ", topicData);
+	// console.log('***************topicData in topicsController.search**************: ', topicData);
 
 	res.render('topic', topicData);
-}; 
-
-//const topicsAPI = require('../api/topics');  // Add this line to import topicsAPI
-
-// write this after the 404 api route not found error is fixed 
-// write this after 500 api is not defined error is fixed 
-// ignore this function for now, does not affect 500 error 
-/* topicsController.search = async function (req, res, next) {
-	//console.log("in topicsController.search, req.query: ", req.query);
-	console.log("in topicsController.search, req.query: ", req.query);
-	const searchData = await api.topics.search(req, req.query);
-	console.log("searchData in topicsController.search from api function: ", searchData);
-	
- 	const section = req.query.section || 'joindate';
-
-	searchData.pagination = pagination.create(req.query.page, searchData.pageCount, req.query);
-	searchData[`section_${section}`] = true;
-	//searchData.displayUserSearch = true;
-	//await render(req, res, searchData);
-	
-	res.render('partials/topic/post', searchData); 
-};   */
-
+};
 
 topicsController.teaser = async function (req, res, next) {
 	const tid = req.params.topic_id;

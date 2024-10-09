@@ -49,5 +49,4 @@ module.exports = function (Topics) {
     // Returning the Topics object with the new method
     return Topics;
 };
-
- */
+*/

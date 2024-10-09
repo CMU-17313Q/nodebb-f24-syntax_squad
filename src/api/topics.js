@@ -33,15 +33,14 @@ topicsAPI._checkThumbPrivileges = async function ({ tid, uid }) {
 	}
 };
 
-// api search like in src/api/users.js 
-// does the name of the function matter? 
+// api search like in src/api/users.js
+// does the name of the function matter?
 // data object has no tid
 topicsAPI.search = async function (caller, data) {
-	console.log("in topicsAPI.search function");
-	//console.log("caller:", caller);
-	console.log("topicsAPI.search data object:", data); // = { section: '', page: '1', query: 'M' }
-	
-	console.log("in src/api/topics.js");
+	console.log('in topicsAPI.search function');
+	// console.log('caller:', caller);
+	// console.log('topicsAPI.search data object:', data); // = { section: '', page: '1', query: 'M' }
+
 	if (!data) {
 		throw new Error('[[error:invalid-data]]');
 	}
@@ -49,19 +48,19 @@ topicsAPI.search = async function (caller, data) {
 	const [allowed, isPrivileged] = await Promise.all([
 		privileges.global.can('search:users', caller.uid),
 		user.isPrivileged(caller.uid),
-	]);  
+	]);
 
- 	if (!allowed || !isPrivileged) {
-		console.log("no privileges error");
+	if (!allowed || !isPrivileged) {
+		// console.log('no privileges error');
 		throw new Error('[[error:no-privileges]]');
-	}   
-	// give topics.postSearch function the inputs that make up the data input object 
+	}
+	// give topics.postSearch function the inputs that make up the data input object
 	return await topics.postSearch({
 		uid: caller.uid,
 		query: data.query,
 		tid: data.tid,
 		page: data.page || 1,
-		searchBy: data.searchBy || 'content'
+		searchBy: data.searchBy || 'content',
 	});
 };
 

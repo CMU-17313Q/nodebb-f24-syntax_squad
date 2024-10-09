@@ -17,17 +17,17 @@ define('forum/topic', [
 	'alerts',
 	'bootbox',
 	'clipboard',
-	'benchpress' // adding benchpress for search 
+	'benchpress', // adding benchpress for search
 ], function (
 	infinitescroll, threadTools, postTools,
 	events, posts, navigator, sort, quickreply,
 	components, storage, hooks, api, alerts,
-	bootbox, clipboard, Benchpress // adding benchpress for search 
+	bootbox, clipboard, Benchpress // adding benchpress for search
 ) {
 	const Topic = {};
 	let tid = 0;
 	let currentUrl = '';
-	let searchResultCount = 0; // initializing for search 
+	let searchResultCount = 0; // initializing for search
 
 	$(window).on('action:ajaxify.start', function (ev, data) {
 		events.removeListeners();
@@ -39,12 +39,12 @@ define('forum/topic', [
 		}
 	});
 
-	// event listener for topic posts search 
+	// event listener for topic posts search
 	Topic.handleSearch = function (params) {
-		console.log("in Topic.handlesearch in client, event listener");
+		console.log('in Topic.handlesearch in client, event listener');
 		searchResultCount = params && params.resultCount;
 		// #search-topicposts is the class name of the search button html block
-		// "keyup" event makes it so that the event is triggered when user releases a key 
+		// "keyup" event makes it so that the event is triggered when user releases a key
 		$('#search-topicposts').on('keyup', utils.debounce(doSearch, 250));
 		// call doSearch function defined below
 		$('.search select, .search input[type="checkbox"]').on('change', doSearch);
@@ -83,7 +83,7 @@ define('forum/topic', [
 		handleBookmark(tid);
 		handleThumbs();
 
-		// adding here 
+		// calling event handler function
 		Topic.handleSearch();
 
 		$(window).on('scroll', utils.debounce(updateTopicTitle, 250));
@@ -153,9 +153,9 @@ define('forum/topic', [
 
 			navigator.scrollBottom(postCount - 1);
 		});
-	}; 
+	};
 
-	// to be called in doSearch 
+	// to be called in doSearch
 	function getActiveSection() {
 		return utils.param('section') || '';
 	}
@@ -164,45 +164,45 @@ define('forum/topic', [
 	function getCurrentTopicId() {
 		// get current url
 		const url = window.location.href;
-	
+
 		// create a url object
 		const urlObj = new URL(url);
-	
+
 		// split the pathname into parts
 		const pathParts = urlObj.pathname.split('/');
-	
-		// the tid is the second part of the path 
-		const tid = pathParts[2]; 
-	
+
+		// the tid is the second part of the path
+		const tid = pathParts[2];
+
 		return tid; // return the extracted tid
 	}
 
-	// add doSearch function 
+	// add doSearch function
 	function doSearch() {
-		console.log("in doSearch");
-		console.log("ajaxify:", ajaxify);
+		console.log('in doSearch');
+		console.log('ajaxify: ', ajaxify);
 		if (!ajaxify.data.template.topic) {
-			console.log("returning here");
+			console.log('returning here');
 			return;
 		}
-		console.log("passed ajaxify condition");
-		//$('[component="user/search/icon"]').removeClass('fa-search').addClass('fa-spinner fa-spin');
+		console.log('passed ajaxify condition');
+		// $('[component="user/search/icon"]').removeClass('fa-search').addClass('fa-spinner fa-spin');
 		// the value from the search input field,
-		// username = "searchBy" value from user search function 
+		// username = "searchBy" value from user search function
 		const content = $('#search-topicposts').val();
-		console.log("in public/src/client/topic.js, content: ", content);
-		
-		const activeSection = getActiveSection(); // defined above 
-		console.log("activeSection: ", activeSection);
+		console.log('in public/src/client/topic.js, content: ', content);
+
+		const activeSection = getActiveSection(); // defined above
+		console.log('activeSection: ', activeSection);
 
 		const query = {
 			section: activeSection,
 			page: 1,
 		};
 
-		const tid = getCurrentTopicId(); // using helper function to extract tid 
-   		query.tid = tid;
-		console.log("current tid in doSearch: ", tid);
+		const tid = getCurrentTopicId(); // using helper function to extract tid
+		query.tid = tid;
+		console.log('current tid in doSearch: ', tid);
 
 		if (!content) {
 			return loadPage(query);
@@ -210,42 +210,42 @@ define('forum/topic', [
 
 		query.query = content;
 
-		console.log("content: ", content);
-		// the query that is given to the controller then the controller gives it to search api function 
+		console.log('content: ', content);
+		// the query that is given to the controller then the controller gives it to search api function
 		loadPage(query);
 	}
 
 
-	// to render search results, loadpage is called in doSearch and calls renderSearchResults 
+	// to render search results, loadpage is called in doSearch and calls renderSearchResults
 	function loadPage(query) {
-		// route not found here 
+		// route not found here
 		api.get('/api/topics', query)
 			.then(renderSearchResults)
-			.catch(alerts.error); 
+			.catch(alerts.error);
 	}
 
 	function renderSearchResults(data) {
-		console.log("###############data in rendersearchresults client/topic.js: ", data);
-		// Render pagination 
+		console.log('###############data in rendersearchresults client/topic.js: ', data);
+		// Render pagination
 		Benchpress.render('partials/paginator', { pagination: data.pagination }).then(function (html) {
 			$('.pagination-container').replaceWith(html);
 		});
-	
+
 		// Check if search results exist
 		if (data.posts && data.posts.length) {
 			// Limit posts based on search result count, if applicable
 			if (searchResultCount) {
 				data.posts = data.posts.slice(0, searchResultCount);
 			}
-	
+
 			data.isAdminOrGlobalMod = app.user.isAdmin || app.user.isGlobalMod;
-	
+
 			// Render the posts
 			app.parseAndTranslate('topic', 'topic', data, function (html) {
-			//app.parseAndTranslate('partials/topic/post', 'partials/topic/post', data, function (html) {
-				console.log("parseandtranslate topic");
-				//$('#post-container').html(html);
-				//$('#post-container').find('.timeago').timeago(); // Update timeago format
+			// app.parseAndTranslate('partials/topic/post', 'partials/topic/post', data, function (html) {
+				console.log('parseandtranslate topic');
+				// $('#post-container').html(html);
+				// $('#post-container').find('.timeago').timeago(); // Update timeago format
 				$('.topic').html(html);
 				$('.topic').find('.timeago').timeago();
 				$('.topic').html('<p>No results found.</p>');
