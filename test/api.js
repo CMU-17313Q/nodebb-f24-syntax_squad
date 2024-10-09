@@ -1,4 +1,4 @@
-/* 'use strict';
+'use strict';
 
 const _ = require('lodash');
 const assert = require('assert');
@@ -672,4 +672,3 @@ describe('API', async () => {
 		});
 	}
 });
- */
