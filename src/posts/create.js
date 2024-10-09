@@ -1,8 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-const fs = require('fs');
-const path = require('path');
 const meta = require('../meta');
 const db = require('../database');
 const plugins = require('../plugins');
@@ -19,7 +17,6 @@ module.exports = function (Posts) {
 		const { uid } = data;
 		const { tid } = data;
 		// eslint-disable-next-line prefer-const
-		let content = data.content.toString();
 		const timestamp = data.timestamp || Date.now();
 		const isMain = data.isMain || false;
 
@@ -30,7 +27,6 @@ module.exports = function (Posts) {
 		if (data.toPid) {
 			await checkToPid(data.toPid, uid);
 		}
-		
 		const pid = await db.incrObjectField('global', 'nextPid');
 		let postData = {
 			pid: pid,
@@ -50,8 +46,9 @@ module.exports = function (Posts) {
 		if (data.handle && !parseInt(uid, 10)) {
 			postData.handle = data.handle;
 		}
-		if(postData.anonymous){
+		if (postData.anonymous) {
 			postData.uid = 0;
+			postData.username = 'Anonymous';
 		}
 
 		let result = await plugins.hooks.fire('filter:post.create', { post: postData, data: data });
