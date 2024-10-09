@@ -2531,11 +2531,11 @@ describe('Topic\'s', () => {
 		});
 
 		it('should return all posts matching user query', async () => {
-			//console.log('*****************************');
-			//console.log('topic:', topic);
-			//console.log('topic.tid:', topic.tid);
+			// console.log('*****************************');
+			// console.log('topic:', topic);
+			// console.log('topic.tid:', topic.tid);
 			const searchData = await topics.postSearch({ query: 'blocked' });
-			//console.log('searchData:', searchData);
+			// console.log('searchData:', searchData);
 			assert.equal(searchData.matchCount, 1);
 			assert.equal(searchData.posts.length, 1);
 		});
@@ -2550,7 +2550,6 @@ describe('Topic\'s', () => {
 			assert.equal(searchData.posts.length, 2);
 		});
 	});
-
 });
 
 describe('Topics\'', async () => {
