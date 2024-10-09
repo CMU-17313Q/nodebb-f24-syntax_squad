@@ -2531,7 +2531,6 @@ describe('Topic\'s', () => {
 		});
 
 		it('should return all posts matching user query', async () => {
-			// console.log('*****************************');
 			// console.log('topic:', topic);
 			// console.log('topic.tid:', topic.tid);
 			const searchData = await topics.postSearch({ query: 'blocked' });
@@ -2541,7 +2540,6 @@ describe('Topic\'s', () => {
 		});
 
 		it('should return all posts if the query is empty', async () => {
-			// console.log('*****************************');
 			// console.log('topic:', topic);
 			// console.log('topic.tid:', topic.tid);
 			const searchData = await topics.postSearch({ query: '' });
