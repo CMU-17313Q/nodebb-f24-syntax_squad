@@ -153,7 +153,7 @@ define('forum/topic', [
 
 			navigator.scrollBottom(postCount - 1);
 		});
-	};
+	}; 
 
 	// to be called in doSearch 
 	function getActiveSection() {
@@ -223,8 +223,9 @@ define('forum/topic', [
 			.then(renderSearchResults)
 			.catch(alerts.error); 
 	}
+
 	function renderSearchResults(data) {
-		console.log("data in rendersearchresults client/topic.js: ", data);
+		console.log("###############data in rendersearchresults client/topic.js: ", data);
 		// Render pagination 
 		Benchpress.render('partials/paginator', { pagination: data.pagination }).then(function (html) {
 			$('.pagination-container').replaceWith(html);
@@ -240,37 +241,20 @@ define('forum/topic', [
 			data.isAdminOrGlobalMod = app.user.isAdmin || app.user.isGlobalMod;
 	
 			// Render the posts
-			//app.parseAndTranslate('topics', 'topics', data, function (html) {
-			app.parseAndTranslate('partials/topic/post', 'partials/topic/post', data, function (html) {
+			app.parseAndTranslate('topic', 'topic', data, function (html) {
+			//app.parseAndTranslate('partials/topic/post', 'partials/topic/post', data, function (html) {
 				console.log("parseandtranslate topic");
-				$('#post-container').html(html);
-				$('#post-container').find('.timeago').timeago(); // Update timeago format
+				//$('#post-container').html(html);
+				//$('#post-container').find('.timeago').timeago(); // Update timeago format
+				$('.topic').html(html);
+				$('.topic').find('.timeago').timeago();
+				$('.topic').html('<p>No results found.</p>');
 			});
 		} else {
 			// Handle no results found scenario
-			$('#post-container').html('<p>No results found.</p>');
+			$('.topic').html('<p>No results found.</p>');
 		}
 	}
-	
-	/* // render search results function
-	function renderSearchResults(data) {
-		Benchpress.render('partials/paginator', { pagination: data.pagination }).then(function (html) {
-			$('.pagination-container').replaceWith(html);
-		});
-
-		if (searchResultCount) {
-			data.topics = data.topics.slice(0, searchResultCount);
-		}
-
-		data.isAdminOrGlobalMod = app.user.isAdmin || app.user.isGlobalMod;
-
-		app.parseAndTranslate('topics', 'topics', data, function (html) {
-			$('#posts-container').html(html);
-			html.find('.timeago').timeago();
-			//$('[component="user/search/icon"]').addClass('fa-search').removeClass('fa-spinner fa-spin');
-		});
-	} */
-
 
 	function handleBookmark(tid) {
 		if (window.location.hash) {
