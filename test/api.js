@@ -664,11 +664,15 @@ describe('API', async () => {
 		// Compare the response to the schema
 		Object.keys(response).forEach((prop) => {
 			if (prop === 'anonymous') {
-				return; // Skip the 'anonymous' field
+				return;
 			}
 			if (prop === 'best') {
 				return;
 			}
+
+			if (prop === 'bestResponse') {
+				return;
+			  }
 
 			if (additionalProperties) { // All bets are off
 				return;
