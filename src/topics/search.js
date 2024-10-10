@@ -1,5 +1,4 @@
 /* 'use strict';
-
 const Topics = require('./data'); // Assuming this imports the Topics object from data.js
 
 module.exports = function (Topics) {
