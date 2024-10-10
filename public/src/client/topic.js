@@ -248,7 +248,7 @@ define('forum/topic', [
 				// $('#post-container').find('.timeago').timeago(); // Update timeago format
 				$('.topic').html(html);
 				$('.topic').find('.timeago').timeago();
-				$('.topic').html('<p>No results found.</p>');
+				// $('.topic').html('<p>No results found.</p>');
 			});
 		} else {
 			// Handle no results found scenario
