@@ -332,7 +332,7 @@ describe('API', async () => {
 	writeApi = await SwaggerParser.dereference(writeApiPath);
 
 	it('should grab all mounted routes and ensure a schema exists', async () => {
-		console.log("ensure a schema exists");
+		// console.log('ensure a schema exists');
 		const webserver = require('../src/webserver');
 		const buildPaths = function (stack, prefix) {
 			const paths = stack.map((dispatch) => {
@@ -394,13 +394,13 @@ describe('API', async () => {
 				});
 			});
 		});
-	}); 
+	});
 
 	generateTests(readApi, Object.keys(readApi.paths));
 	generateTests(writeApi, Object.keys(writeApi.paths), writeApi.servers[0].url);
 
 	function generateTests(api, paths, prefix) {
-		console.log("generating tests");
+		// console.log('generating tests');
 		// Iterate through all documented paths, make a call to it,
 		// and compare the result body with what is defined in the spec
 		const pathLib = path; // for calling path module from inside this forEach
@@ -549,7 +549,7 @@ describe('API', async () => {
 					if (!http200) {
 						return;
 					}
-					console.log("method: ", method, "path: ", path);
+					// console.log('method: ', method, 'path: ', path);
 					// assert.strictEqual(result.response.statusCode, 200, `HTTP 200 expected (path: ${method} ${path}`);
 
 					const hasJSON = http200.content && http200.content['application/json'];
@@ -559,7 +559,7 @@ describe('API', async () => {
 					}
 
 					// TODO someday: text/csv, binary file type checking?
-				});  
+				});
 
 				it('should successfully re-login if needed', async () => {
 					const reloginPaths = ['GET /api/user/{userslug}/edit/email', 'PUT /users/{uid}/password', 'DELETE /users/{uid}/sessions/{uuid}'];
@@ -587,10 +587,10 @@ describe('API', async () => {
 
 	function compare(schema, response, method, path, context) {
 		// console.log("path in function compare: ", path);
-		// if commented out, matchcount is a required property error 
+		// if commented out, matchcount is a required property error
 		if (path === '/api/topics/') {
 			return;
-		}; 
+		}
 
 		let required = [];
 		const additionalProperties = schema.hasOwnProperty('additionalProperties');

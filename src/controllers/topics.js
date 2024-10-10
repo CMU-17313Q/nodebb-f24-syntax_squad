@@ -426,7 +426,7 @@ topicsController.search = async function (req, res, next) {
 	// here is where topic posts are retrieved
 	await topics.getTopicWithPosts(topicData, set, req.uid, start, stop, reverse);
 	const searchData = await api.topics.search(req, req.query);
-	console.log("/////***** api.topics.search return in topicsController.search: ", searchData);
+	// console.log('/////***** api.topics.search return in topicsController.search: ', searchData);
 
 	topicData.posts = searchData.posts;
 
