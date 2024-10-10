@@ -1271,8 +1271,5 @@ describe('Anonymous Posting', () => {
 
 		assert(postResult);
 		assert.strictEqual(postResult.postData.anonymous, false, 'The post should be marked as anonymous');
-		// Removed check for uid === 0
 	});
-
-
 });
