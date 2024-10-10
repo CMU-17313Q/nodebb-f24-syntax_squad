@@ -1199,41 +1199,6 @@ describe('Post\'s', () => {
 				assert.strictEqual(events.length, 0);
 			});
 		});
-<<<<<<< HEAD
-=======
-		describe('Best Response Feature', () => {
-			let uid;
-			let topic;
-			let post;
-			let pid;
-			before(async () => {
-				// Create a user for testing
-				uid = await user.create({ username: 'bestResponseUser' });
-				// Create a topic and post for testing the best response feature
-				topic = await topics.post({
-					uid: uid,
-					cid: cid,
-					title: 'Topic for best response testing',
-					content: 'This is the initial post content.',
-				});
-				pid = topic.postData.pid; // Post ID of the initial post
-			});
-			it('should mark a post as the best response', async () => {
-				// Mark the post as the best response
-				await posts.markAsBestResponse({ pid, tid: topic.topicData.tid, uid });
-				// Verify that the post is marked as best response
-				const postData = await posts.getPostData(pid);
-				assert.strictEqual(postData.isBest, true, 'The post should be marked as best response');
-			});
-			it('should unmark a post as the best response', async () => {
-				// Unmark the post as the best response
-				await posts.markAsBestResponse({ pid, tid: topic.topicData.tid, uid }, false);
-				// Verify that the post is no longer marked as best response
-				const postData = await posts.getPostData(pid);
-				assert.strictEqual(postData.isBest, false, 'The post should not be marked as best response');
-			});
-		});
->>>>>>> a03afa2bf1c38630bf48f7399484631deb8e4af7
 	});
 });
 
