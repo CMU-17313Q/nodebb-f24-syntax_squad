@@ -672,7 +672,7 @@ describe('API', async () => {
 
 			if (prop === 'bestResponse') {
 				return;
-			  }
+			}
 
 			if (additionalProperties) { // All bets are off
 				return;
