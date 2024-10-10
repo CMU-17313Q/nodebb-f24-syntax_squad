@@ -521,13 +521,12 @@ describe('API', async () => {
 					const { responses } = context[method];
 					try {
 						assert(responses.hasOwnProperty('418') || Object.keys(responses).includes(String(result.response.statusCode)),
-						`${method.toUpperCase()} ${path} sent back unexpected HTTP status code: ${result.response.statusCode}`);
+							`${method.toUpperCase()} ${path} sent back unexpected HTTP status code: ${result.response.statusCode}`);
 					} catch (error) {
 						console.log(`Skipping test due to error: ${error.message}`);
 						this.skip();
 					}
 				});
-				  
 				// Recursively iterate through schema properties, comparing type
 				it('response body should match schema definition', () => {
 					const http302 = context[method].responses['302'];
