@@ -200,7 +200,7 @@ define('forum/topic', [
 			page: 1,
 		};
 
-		const tid = getCurrentTopicId(); // using helper function to extract tid
+		const tid = getCurrentTopicId(); // using helper function to extract the tid
 		query.tid = tid;
 		console.log('current tid in doSearch: ', tid);
 
