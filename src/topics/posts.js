@@ -73,6 +73,7 @@ module.exports = function (Topics) {
 			uid: uid,
 			posts: await Topics.addPostData(postData, uid),
 		});
+		// console.log('******getTopicPosts return: ', result.posts);
 		return result.posts;
 	};
 
