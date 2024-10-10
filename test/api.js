@@ -395,7 +395,6 @@ describe('API', async () => {
 					assert(schema.paths.hasOwnProperty(normalizedPath), `${pathObj.path} is not defined in schema docs`);
 					// console.log("IT IS DEFINED IN SCHEMA DOCS");
 					assert(schema.paths[normalizedPath].hasOwnProperty(pathObj.method), `${pathObj.path} was found in schema docs, but ${pathObj.method.toUpperCase()} method is not defined`);
-
 				});
 			});
 		});
