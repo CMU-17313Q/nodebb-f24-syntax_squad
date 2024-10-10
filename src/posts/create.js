@@ -10,15 +10,15 @@ const categories = require('../categories');
 const groups = require('../groups');
 const privileges = require('../privileges');
 
+
 module.exports = function (Posts) {
 	Posts.create = async function (data) {
 		// This is an internal method, consider using Topics.reply instead
 		const { uid } = data;
 		const { tid } = data;
-		const content = data.content.toString();
+		// eslint-disable-next-line prefer-const
 		const timestamp = data.timestamp || Date.now();
 		const isMain = data.isMain || false;
-		// const anonymous = data.isAnonymous || false;
 
 		if (!uid && parseInt(uid, 10) !== 0) {
 			throw new Error('[[error:invalid-uid]]');
@@ -27,15 +27,14 @@ module.exports = function (Posts) {
 		if (data.toPid) {
 			await checkToPid(data.toPid, uid);
 		}
-
 		const pid = await db.incrObjectField('global', 'nextPid');
 		let postData = {
 			pid: pid,
 			uid: uid,
 			tid: tid,
-			content: content,
+			content: data.content,
 			timestamp: timestamp,
-			anonymous: data.isAnonymous || false,
+			anonymous: data.isAnonymous,
 		};
 
 		if (data.toPid) {
@@ -46,6 +45,10 @@ module.exports = function (Posts) {
 		}
 		if (data.handle && !parseInt(uid, 10)) {
 			postData.handle = data.handle;
+		}
+		if (postData.anonymous) {
+			postData.uid = 0;
+			postData.username = 'Anonymous';
 		}
 
 		let result = await plugins.hooks.fire('filter:post.create', { post: postData, data: data });

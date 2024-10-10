@@ -18,6 +18,7 @@ const intFields = [
 module.exports = function (Topics) {
 	// adding search function here instead of in a separate search.js file
 	Topics.postSearch = async function (data) {
+
 		// console.log('in Topics.postSearch in src/topics/data.js');
 		// console.log('Topics.postSearch input data:', data);
 
@@ -43,6 +44,7 @@ module.exports = function (Topics) {
 				pageCount: paginate ? 1 : 0, // set to 1 page if pagination is enabled
 				posts: postsData, // return all posts
 			};
+
 			// console.log('searchResult when query is empty: ', searchResult);
 			return searchResult;
 		}
