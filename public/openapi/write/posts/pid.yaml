@@ -64,6 +64,9 @@ get:
                     type: boolean
                   downvoted:
                     type: boolean
+                  best:
+                    type: boolean
+                    description: Indicates whether this post is marked as the best response
 put:
   tags:
     - posts
