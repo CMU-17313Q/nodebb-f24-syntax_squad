@@ -1,4 +1,4 @@
-'use strict';
+/* 'use strict';
 
 module.exports = function (Topics) {
 	Topics.postSearch = async function (data) {
@@ -47,3 +47,4 @@ module.exports = function (Topics) {
 		return searchResult;
 	};
 };
+ */
