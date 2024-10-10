@@ -36,7 +36,6 @@ module.exports = function (Posts) {
 			timestamp: timestamp,
 			anonymous: data.isAnonymous || false,
 			best: data.best || false,
-			anonymous: data.isAnonymous,
 		};
 
 		if (data.toPid) {
