@@ -169,7 +169,7 @@ paths:
   /posts/{pid}:
     $ref: 'write/posts/pid.yaml'
   /api/posts/{pid}/best:
-    $ref: 'read/posts/pid/best.yaml'
+    $ref: 'write/posts/pid/best.yaml'
   /posts/{pid}/index:
     $ref: 'write/posts/pid/index.yaml'
   /posts/{pid}/raw:
