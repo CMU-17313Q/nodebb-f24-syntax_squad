@@ -45,7 +45,7 @@ topicsAPI.search = async function (caller, data) {
 		throw new Error('[[error:invalid-data]]');
 	}
 	// checks if searcher can search (only admins can search?)
-	const [allowed, isPrivileged] = await Promise.all([
+/* 	const [allowed, isPrivileged] = await Promise.all([
 		privileges.global.can('search:users', caller.uid),
 		user.isPrivileged(caller.uid),
 	]);
@@ -53,7 +53,7 @@ topicsAPI.search = async function (caller, data) {
 	if (!allowed || !isPrivileged) {
 		// console.log('no privileges error');
 		throw new Error('[[error:no-privileges]]');
-	}
+	} */
 	// give topics.postSearch function the inputs that make up the data input object
 	return await topics.postSearch({
 		uid: caller.uid,
