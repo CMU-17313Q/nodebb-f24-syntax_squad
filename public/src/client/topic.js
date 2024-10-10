@@ -423,6 +423,7 @@ define('forum/topic', [
 				$('#post-tooltip').remove();
 				if (postData && ajaxify.data.template.topic) {
 					postCache[pid] = postData;
+					// console.log("postData in app.parseandTranslate for rendering post: ", postData);
 					const tooltip = await app.parseAndTranslate('partials/topic/post-preview', { post: postData });
 					if (destroyed) {
 						return;
