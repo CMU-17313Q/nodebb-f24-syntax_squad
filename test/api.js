@@ -331,7 +331,6 @@ describe('API', async () => {
 			}
 		}
 	});
-	
 	readApi = await SwaggerParser.dereference(readApiPath);
 	writeApi = await SwaggerParser.dereference(writeApiPath);
 
