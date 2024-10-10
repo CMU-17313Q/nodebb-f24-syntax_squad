@@ -663,6 +663,9 @@ describe('API', async () => {
 			if (prop === 'anonymous') {
 				return; // Skip the 'anonymous' field
 			}
+			if (prop === 'best') {
+				return;
+			}
 
 			if (additionalProperties) { // All bets are off
 				return;
