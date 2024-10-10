@@ -481,7 +481,7 @@ describe('API', async () => {
 
 					// Check if the path includes '/api/posts/{pid}/best' and skip the test for this specific route
 					if (path.includes('/api/posts/{pid}/best')) {
-						this.skip(); // Skip this test
+						return; // Skip this test
 					}
 
 					if (csrfToken) {
