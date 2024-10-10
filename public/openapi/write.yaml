@@ -168,6 +168,8 @@ paths:
     $ref: 'write/tags/tag/follow.yaml'
   /posts/{pid}:
     $ref: 'write/posts/pid.yaml'
+  /api/posts/{pid}/best:
+    $ref: 'write/posts/pid/best.yaml'
   /posts/{pid}/index:
     $ref: 'write/posts/pid/index.yaml'
   /posts/{pid}/raw:

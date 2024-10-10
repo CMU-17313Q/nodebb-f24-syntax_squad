@@ -22,6 +22,9 @@ PostObject:
       type: number
     votes:
       type: number
+    best:
+      type: boolean
+      description: Indicates whether this post is marked as the best response
     timestampISO:
       type: string
       description: An ISO 8601 formatted date string (complementing `timestamp`)
