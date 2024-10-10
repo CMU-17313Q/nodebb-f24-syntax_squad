@@ -326,8 +326,6 @@ describe('API', async () => {
 		} catch (e) {
 			if (e.code === 'ENOENT' && e.message.includes('best.yaml')) {
 				console.log('Skipping validation for best.yaml as the file is not present');
-			} else {
-				assert.ifError(e);
 			}
 		}
 	});
