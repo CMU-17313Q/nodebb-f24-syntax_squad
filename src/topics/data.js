@@ -18,7 +18,6 @@ const intFields = [
 module.exports = function (Topics) {
 	// adding search function here instead of in a separate search.js file
 	Topics.postSearch = async function (data) {
-
 		// console.log('in Topics.postSearch in src/topics/data.js');
 		// console.log('Topics.postSearch input data:', data);
 
