@@ -71,7 +71,6 @@ module.exports = function (Topics) {
 		searchResult.timing = (process.hrtime(startTime)[1] / 1e6).toFixed(2); // ms timing
 
 		// console.log('Final searchResult: ', searchResult);
-    
 		return searchResult;
 		// return filteredPosts;
 	};
