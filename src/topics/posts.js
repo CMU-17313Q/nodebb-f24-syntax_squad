@@ -1,15 +1,17 @@
+
 'use strict';
 
 const _ = require('lodash');
 const validator = require('validator');
 const nconf = require('nconf');
-
+// const { post } = require('jquery');
 const db = require('../database');
 const user = require('../user');
 const posts = require('../posts');
 const meta = require('../meta');
 const plugins = require('../plugins');
 const utils = require('../utils');
+
 
 const backlinkRegex = new RegExp(`(?:${nconf.get('url').replace('/', '\\/')}|\b|\\s)\\/topic\\/(\\d+)(?:\\/\\w+)?`, 'g');
 
@@ -75,65 +77,30 @@ module.exports = function (Topics) {
 	};
 
 	async function addEventStartEnd(postData, set, reverse, topicData) {
-		// console.log('njoud: refactored code is running');
 		if (!postData.length) {
 			return;
 		}
-		/*
-		helper function to be called for each post object
-		in the postData array
-		to set the start and end times of each post
-		*/
-		function setEventTimes(p, nextPost, reverse, topicData) {
-			// console.log('njoud: refactored code is running (helper function 1)');
+		postData.forEach((p, index) => {
 			if (p && p.index === 0 && reverse) {
 				p.eventStart = topicData.lastposttime;
 				p.eventEnd = Date.now();
-			} else if (p && nextPost) {
-				p.eventStart = reverse ? nextPost.timestamp : p.timestamp;
-				p.eventEnd = reverse ? p.timestamp : nextPost.timestamp;
+			} else if (p && postData[index + 1]) {
+				p.eventStart = reverse ? postData[index + 1].timestamp : p.timestamp;
+				p.eventEnd = reverse ? p.timestamp : postData[index + 1].timestamp;
 			}
-		}
-		postData.forEach((p, index) => {
-			const nextPost = postData[index + 1];
-			setEventTimes(p, nextPost, reverse, topicData);
 		});
-		/*
-		call another helper function to handle the last post
-		*/
-		await handleLastPost(postData, set, reverse, topicData);
-	}
-	/*
-	helper function for last post
-	*/
-	async function handleLastPost(lastPost, set, reverse, topicData) {
-		// console.log('njoud: refactored code is running (helper function 2)');
-		if (!lastPost) {
-			return;
-		}
-		/*
-		break down if else statements
-		*/
-		if (reverse) {
-			lastPost.eventStart = topicData.timestamp;
-			lastPost.eventEnd = lastPost.timestamp;
-		} else {
-			lastPost.eventStart = lastPost.timestamp;
-			lastPost.eventEnd = Date.now();
-		}
-		if (!lastPost.index) {
-			return;
-		}
-		const getNextPost = reverse ? 'getSortedSetRevRangeWithScores' : 'getSortedSetRangeWithScores';
-		const nextPost = await db[getNextPost](set, lastPost.index, lastPost.index);
-		/*
-		combine reverse and nextPost.length checks
-		in one boolean check
-		*/
-		if (reverse && nextPost.length) {
-			lastPost.eventStart = nextPost[0].score;
-		} else if (!reverse && nextPost.length) {
-			lastPost.eventEnd = nextPost[0].score;
+		const lastPost = postData[postData.length - 1];
+		if (lastPost) {
+			lastPost.eventStart = reverse ? topicData.timestamp : lastPost.timestamp;
+			lastPost.eventEnd = reverse ? lastPost.timestamp : Date.now();
+			if (lastPost.index) {
+				const nextPost = await db[reverse ? 'getSortedSetRevRangeWithScores' : 'getSortedSetRangeWithScores'](set, lastPost.index, lastPost.index);
+				if (reverse) {
+					lastPost.eventStart = nextPost.length ? nextPost[0].score : lastPost.eventStart;
+				} else {
+					lastPost.eventEnd = nextPost.length ? nextPost[0].score : lastPost.eventEnd;
+				}
+			}
 		}
 	}
 
@@ -174,10 +141,26 @@ module.exports = function (Topics) {
 				postObj.replies = replies[i];
 				postObj.selfPost = parseInt(uid, 10) > 0 && parseInt(uid, 10) === postObj.uid;
 
+=======
+				console.log(postObj);
+				console.log('hello');
 				// Username override for guests, if enabled
 				if (meta.config.allowGuestHandles && postObj.uid === 0 && postObj.handle) {
 					postObj.user.username = validator.escape(String(postObj.handle));
 					postObj.user.displayname = postObj.user.username;
+				}
+
+				if (postObj.anonymous === 'true') {
+					postObj.user = structuredClone(postObj.user);
+					postObj.user.username = 'Anonymous';
+					postObj.user.displayname = 'Anonymous';
+					postObj.user.userslug = 'Anonymous';
+					postObj.user.status = 'away';
+					postObj.user.postcount = 0;
+					postObj.user.topiccount = 0;
+					postObj.user.uid = 0;
+					postObj.user['icon:text'] = '?';
+					postObj.user['icon:bgColor'] = '#aaaaaa';
 				}
 			}
 		});
