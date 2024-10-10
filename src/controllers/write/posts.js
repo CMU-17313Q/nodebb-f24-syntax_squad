@@ -100,8 +100,6 @@ Posts.delete = async (req, res) => {
 	helpers.formatApiResponse(200, res);
 };
 
-'use strict';
-
 // Add function to mark post as best response
 Posts.markAsBestResponse = async (req, res) => {
 	const postId = req.params.pid; // Get the post ID from the request parameters
@@ -117,9 +115,8 @@ Posts.markAsBestResponse = async (req, res) => {
 		// Fetch all post IDs related to the topic
 		const allPostIds = await db.getSortedSetRange(`tid:${tid}:posts`, 0, -1); // Get all post IDs in the topic
 
-		// Iterate through all posts and update the 'best' field
-		for (const pid of allPostIds) {
-			// Check if the current post is the one being marked as best response
+		// Prepare an array of promises for updating the 'best' field
+		const updatePromises = allPostIds.map(async (pid) => {
 			if (pid === postId) {
 				// Set the 'best' field to true for the selected post
 				await db.setObjectField(`post:${pid}`, 'best', true);
@@ -129,7 +126,10 @@ Posts.markAsBestResponse = async (req, res) => {
 				await db.setObjectField(`post:${pid}`, 'best', false);
 				console.log(`Post ${pid} is NOT marked as best:`, await posts.getPostData(pid));
 			}
-		}
+		});
+
+		// Wait for all updates to complete
+		await Promise.all(updatePromises);
 
 		// Set the bestResponse field to the postId in the topic data
 		await db.setObjectField(`topic:${tid}`, 'bestResponse', postId);
@@ -142,10 +142,6 @@ Posts.markAsBestResponse = async (req, res) => {
 		helpers.formatApiResponse(400, res, error);
 	}
 };
-
-
-
-
 
 Posts.move = async (req, res) => {
 	await api.posts.move(req, {
