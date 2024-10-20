@@ -487,11 +487,6 @@ describe('API', async () => {
 				it('should not error out when called', async () => {
 					await setupData();
 
-					// Check if the path includes '/api/posts/{pid}/best' and skip the test for this specific route
-					if (path.includes('/api/posts/{pid}/best')) {
-						return; // Skip this test
-					}
-
 					if (csrfToken) {
 						headers['x-csrf-token'] = csrfToken;
 					}
