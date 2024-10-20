@@ -15,6 +15,10 @@ module.exports = function () {
 	setupApiRoute(router, 'put', '/:pid', [middleware.ensureLoggedIn, middleware.checkRequired.bind(null, ['content'])], controllers.write.posts.edit);
 	setupApiRoute(router, 'delete', '/:pid', middlewares, controllers.write.posts.purge);
 
+	// Change the route to use PUT for marking a post as the best response
+	setupApiRoute(router, 'put', '/:pid/best', middlewares, controllers.write.posts.markAsBestResponse);
+
+
 	setupApiRoute(router, 'get', '/:pid/index', [middleware.assert.post], controllers.write.posts.getIndex);
 	setupApiRoute(router, 'get', '/:pid/raw', [middleware.assert.post], controllers.write.posts.getRaw);
 	setupApiRoute(router, 'get', '/:pid/summary', [middleware.assert.post], controllers.write.posts.getSummary);

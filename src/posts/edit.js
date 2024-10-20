@@ -125,6 +125,7 @@ module.exports = function (Posts) {
 			uid: postData.uid,
 			mainPid: data.pid,
 			timestamp: rescheduling(data, topicData) ? data.timestamp : topicData.timestamp,
+			bestResponse: data.bestResponse || topicData.bestResponse, // Include bestResponse in the update
 		};
 		if (title) {
 			newTopicData.title = title;
@@ -174,6 +175,7 @@ module.exports = function (Posts) {
 			tags: tags,
 			oldTags: topicData.tags,
 			rescheduled: rescheduling(data, topicData),
+			bestResponse: data.bestResponse || topicData.bestResponse, // Include bestResponse in the update
 		};
 	}
 
