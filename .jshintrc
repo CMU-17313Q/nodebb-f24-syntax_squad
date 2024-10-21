@@ -1,0 +1,13 @@
+{
+    "node": true,
+    "esversion": 9,
+    "curly": true,
+    "eqeqeq": true,
+    "undef": true,
+    "globals": {
+        "console": true,
+        "module": true,
+        "db": true 
+    },
+    "indent": 4
+}
