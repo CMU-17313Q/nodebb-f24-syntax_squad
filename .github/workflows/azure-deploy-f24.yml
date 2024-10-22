@@ -48,7 +48,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'nodebb-SyntaxSquad-f24'
+          app-name: 'nodebb-syntaxsquad-f24'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_85BF0DCA8B934F3684D404E088B53A9D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8F0CD6BC922C44598EB876203CEAED52 }}
           package: .
