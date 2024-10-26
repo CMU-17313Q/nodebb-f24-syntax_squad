@@ -142,9 +142,6 @@ module.exports = function (Topics) {
 				postObj.replies = replies[i];
 				postObj.selfPost = parseInt(uid, 10) > 0 && parseInt(uid, 10) === postObj.uid;
 
-				// console.log(postObj);
-				// console.log('hello');
-
 				// Username override for guests, if enabled
 				if (meta.config.allowGuestHandles && postObj.uid === 0 && postObj.handle) {
 					postObj.user.username = validator.escape(String(postObj.handle));
@@ -334,6 +331,14 @@ module.exports = function (Topics) {
 
 	Topics.getPostCount = async function (tid) {
 		return await db.getObjectField(`topic:${tid}`, 'postcount');
+	};
+
+	// Added this function
+	Topics.markAsBestResponse = async function (pid) {
+		const post = await posts.getPostFields(pid, ['tid']);
+		const { tid } = post;
+		await db.setObjectField(`tid:${tid}`, 'bestResponsePid', pid);
+		return { success: true, message: 'Post marked as best response.' };
 	};
 
 	async function getPostReplies(postData, callerUid) {

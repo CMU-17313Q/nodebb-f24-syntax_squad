@@ -1,0 +1,57 @@
+tags:
+  - posts
+summary: Mark a post as the best response
+description: This operation marks a post as the best response for a topic.
+parameters:
+  - in: path
+    name: pid
+    required: true
+    schema:
+      type: string
+    description: The post ID to be marked as the best response.
+    example: "1"
+responses:
+  '200':
+    description: Post successfully marked as best response
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              description: Status message
+              example: "success"
+            response:
+              type: object
+              properties:
+                pid:
+                  type: number
+                  description: Post ID
+                  example: 1
+                isBest:
+                  type: boolean
+                  description: Indicates if this post is marked as best
+                  example: true
+  '400':
+    description: Invalid request (post ID not found, etc.)
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              description: Error message
+              example: "Invalid post ID"
+  '403':
+    description: Unauthorized to mark this post as best
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              description: Error message
+              example: "Unauthorized"

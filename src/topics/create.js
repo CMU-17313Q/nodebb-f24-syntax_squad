@@ -33,6 +33,7 @@ module.exports = function (Topics) {
 			lastposttime: 0,
 			postcount: 0,
 			viewcount: 0,
+			bestResponse: -1, // Add the bestResponse variable here, initialized to null
 		};
 
 		if (Array.isArray(data.tags) && data.tags.length) {
