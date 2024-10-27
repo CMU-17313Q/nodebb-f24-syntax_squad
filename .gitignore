@@ -2,8 +2,11 @@ dist/
 yarn.lock
 npm-debug.log
 node_modules/*
-!node_modules/nodebb-theme-harmony
-!node_modules/nodebb-plugin-composer-default
+!node_modules/nodebb-plugin-composer-default/static/lib/composer.js
+!node_modules/nodebb-plugin-composer-default/static/templates/partials/composer-title-container.tpl
+!node_modules/nodebb-theme-harmony/templates/partials/topic/emoji-dropdown.tpl
+!node_modules/nodebb-theme-harmony/templates/partials/topic/post.tpl
+!node_modules/nodebb-theme-harmony/templates/topic.tpl
 sftp-config.json
 config.json
 jsconfig.json
