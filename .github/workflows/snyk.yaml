@@ -1,28 +1,37 @@
-name: Snyk Security Scan
+name: Snyk Test
 
 on:
   pull_request:
     branches:
-      - main
-  push:
-    branches:
-      - main
+      - f24
+  workflow_call: # Usually called from deploy
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  checks: write  # for coverallsapp/github-action to create new checks
+  contents: read  # for actions/checkout to fetch code
 
 jobs:
   snyk:
     runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}  # Ensure your token is added as a secret in GitHub
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Install Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: 20
 
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: NPM Install
+        uses: bahmutov/npm-install@v1
         with:
-          args: test --severity-threshold=high
+          useLockFile: false
+
+      - name: Run Snyk Test
+        run: npx snyk test
