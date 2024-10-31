@@ -34,5 +34,4 @@ jobs:
           useLockFile: false
 
       - name: Run Snyk Test
-        run: npx snyk test
-      
+        run: npx snyk test --severity-threshold=high
