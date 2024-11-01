@@ -23,7 +23,7 @@ ignore:
 
   "SNYK-JS-MARKDOWNIT-6483324":
     - "*":
-        reason: "No upgrade available"
+        reason: "No upgrade available for markdown-it@12.3.2; requires update to nodebb-plugin-markdown or markdown-it@13.0.2"
         expires: "2025-12-31"
 
   "SNYK-JS-REQUEST-3361831":
