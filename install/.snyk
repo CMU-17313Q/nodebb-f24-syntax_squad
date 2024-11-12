@@ -2,9 +2,9 @@ version: v1.1293.1
 
 ignore:
   "SNYK-JS-BOOTBOX-174704":
-    - "*": # ignore for all paths
+    - "*":
         reason: "No patch or upgrade available for bootbox@6.0.0"
-        expires: "2025-12-31" 
+        expires: "2025-12-31"
 
   "SNYK-JS-COOKIE-8163060":
     - "*":
@@ -39,4 +39,9 @@ ignore:
   "SNYK-JS-ZXCVBN-3257741":
     - "*":
         reason: "No upgrade path for zxcvbn@4.4.2"
+        expires: "2025-12-31"
+
+  "SNYK-JS-SOURCEMAPSUPPORT-6112477":
+    - "*":
+        reason: "No upgrade or patch available for source-map-support@0.5.21"
         expires: "2025-12-31"
