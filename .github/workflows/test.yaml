@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - f24
+      - f24 -p4
   workflow_call: # Usually called from deploy
 
 defaults:

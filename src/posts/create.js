@@ -14,6 +14,7 @@ const translate = require('../translate');
 
 module.exports = function (Posts) {
 	Posts.create = async function (data) {
+		console.log("infinite looop");
 		// This is an internal method, consider using Topics.reply instead
 		const { uid } = data;
 		const { tid } = data;
@@ -21,6 +22,8 @@ module.exports = function (Posts) {
 		const timestamp = data.timestamp || Date.now();
 		const isMain = data.isMain || false;
 		const [isEnglish, translatedContent] = await translate.translate(data)
+
+		console.log("successfully translated content: ",isEnglish, translatedContent);
 
 		if (!uid && parseInt(uid, 10) !== 0) {
 			throw new Error('[[error:invalid-uid]]');
