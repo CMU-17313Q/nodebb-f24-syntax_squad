@@ -1,0 +1,13 @@
+version: v1.1293.1
+
+ignore:
+  SNYK-JS-BOOTBOX-174704:  # Bootbox XSS
+    - '*':
+        reason: "No upgrade available."
+        expires: '2025-12-31T00:00:00Z'
+
+  SNYK-JS-ELLIPTIC-8187303:  # Elliptic signature issue
+    - '*':
+        reason: "No upgrade available and not critical to our security."
+        expires: '2025-12-31T00:00:00Z'
+
